@@ -1,0 +1,56 @@
+{
+    "name": "nozmoi",
+    "version": "1.0.0",
+    "fsrMinCompatibility": "7.2.0",
+    "type": "solutionpack",
+    "local": true,
+    "label": "Nozmoi",
+    "dependencies": [
+        {
+            "name": "sOARFramework",
+            "type": "solutionpack",
+            "label": "SOAR Framework",
+            "minVersion": "2.0.2"
+        },
+        {
+            "name": "oT-AssetManagement",
+            "type": "solutionpack",
+            "label": "OT - Asset Management",
+            "minVersion": null
+        }
+    ],
+    "prerequisite": null,
+    "publisher": "Community",
+    "description": null,
+    "help": null,
+    "category": [],
+    "supportInfo": null,
+    "iconLarge": null,
+    "postInstallConfig": null,
+    "date": "2023-03-03T10:46:43+00:00",
+    "contents": {
+        "playbooks": [
+            {
+                "name": "10 - SP - Nozomi CMC"
+            }
+        ],
+        "globalVariables": [
+            {
+                "id": 16,
+                "name": "Demo_mode",
+                "value": "true",
+                "default_value": "false"
+            }
+        ],
+        "connectors": [
+            {
+                "name": "Nozomi Networks Central Management Console",
+                "apiName": "nozomi-networks-central-management-console"
+            },
+            {
+                "name": "Nozomi Networks Guardian",
+                "apiName": "nozomi-networks-guardian"
+            }
+        ]
+    }
+}

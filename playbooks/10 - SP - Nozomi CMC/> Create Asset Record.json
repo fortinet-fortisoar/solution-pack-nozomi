@@ -1,0 +1,143 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "> Create Asset Record",
+    "aliasName": null,
+    "tag": null,
+    "description": "This PB will create Asset Record",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "assetRecord"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/7efa71c6-7516-496c-84fd-495c2eb0bec4",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "record": "{{vars.input.params.assetRecord}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "392700bd-044b-4b79-a029-91349eff4a82"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Values",
+            "description": null,
+            "arguments": {
+                "categoryIRI": "{{\"AssetCategory\" | picklist(vars.record.type, \"@id\")}}",
+                "protocolIRI": "{% set iri = [] %}{% for prot in vars.record.protocols %}{% set _ = iri.append(\"AssetProtocol\" | picklist(prot, \"@id\")) %}{% endfor %}{{iri}}"
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "6f97dacc-d7e2-4e39-9e06-ccba99ba48ce"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "7efa71c6-7516-496c-84fd-495c2eb0bec4"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Assets",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "ip": "{{vars.record.ip | join(', ') }}",
+                    "name": "{{vars.record.product_name}}",
+                    "level": "{{\"AssetLevel\" | picklist('Level ' + vars.record.level, \"@id\")}}",
+                    "vendor": "{{vars.record.mac_vendor | join(', ') }}",
+                    "category": "{{vars.categoryIRI}}",
+                    "firmware": "{{vars.record.os_or_firmware}}",
+                    "hostname": "{{vars.record.name}}",
+                    "protocol": "{% set data = [] %}{% for item in vars.protocolIRI | unique %}{% if item is none %}{% set _ = vars.protocolIRI.remove(item) %}{% else %}{% set _ = data.append(item) %}{% endif %}{% endfor %}{{data}}",
+                    "__replace": "true",
+                    "deviceUid": "{{vars.record.device_id}}",
+                    "macAddress": "{{vars.record.mac_address | join(', ') }}",
+                    "description": "<table>\n{% if vars.record.os != \"\" %}\n<tr>\n<th>Operating System<\/th>\n<td>{{vars.record.os}}<\/td>\n<\/tr>\n{% endif %}\n{% if vars.categoryIRI is none %}\n<tr>\n<th>Asset Category<\/th>\n<td>{{vars.record.type}}<\/td>\n<\/tr>\n{% endif %}\n<tr>\n<th>Roles<\/th>\n<td>{{vars.record.roles | join(', ') }}<\/td>\n<\/tr>\n{% if 'Undefined' not in vars.record.zones %}\n<tr>\n<th>Zones<\/th>\n<td>{{vars.record.zones | join(', ') }}<\/td>\n<\/tr>\n{% endif %}\n<tr>\n<th>Protocol<\/th>\n<td>{{vars.record.protocols | join(', ') }}<\/td>\n<\/tr>\n<tr>\n<th>Last Activity Time<\/th>\n<td>{{arrow.get(vars.record.last_activity_time | int).to(\"UTC\").format(\"YYYY-MM-DD HH:mm:ss ZZ\")}}<\/td>\n<\/tr>\n<\/table>",
+                    "registrationDate": "{{vars.record.created_at}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/upsert\/assets",
+                "__recommend": [],
+                "fieldOperation": {
+                    "protocol": "Overwrite",
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "f32e6a71-6388-4692-b58d-697831d25af3"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/392700bd-044b-4b79-a029-91349eff4a82",
+            "sourceStep": "\/api\/3\/workflow_steps\/7efa71c6-7516-496c-84fd-495c2eb0bec4",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "e942ddc5-af2b-46ff-b29c-2c03c682769f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get Values",
+            "targetStep": "\/api\/3\/workflow_steps\/6f97dacc-d7e2-4e39-9e06-ccba99ba48ce",
+            "sourceStep": "\/api\/3\/workflow_steps\/392700bd-044b-4b79-a029-91349eff4a82",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "e28b3bc3-aef2-4831-bed1-dd2d518971b5"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Values -> Create",
+            "targetStep": "\/api\/3\/workflow_steps\/f32e6a71-6388-4692-b58d-697831d25af3",
+            "sourceStep": "\/api\/3\/workflow_steps\/6f97dacc-d7e2-4e39-9e06-ccba99ba48ce",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "89f27d7c-31c1-4a30-9a3a-8a85e6876946"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "9eb98a74-ab4e-4c7b-8ea9-5577ff7eb8ac",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "Referenced",
+        "Assets"
+    ]
+}

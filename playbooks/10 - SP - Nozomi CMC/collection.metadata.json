@@ -1,0 +1,11 @@
+{
+    "@context": "\/api\/3\/contexts\/WorkflowCollection",
+    "@type": "WorkflowCollection",
+    "name": "10 - SP - Nozomi CMC",
+    "description": null,
+    "visible": true,
+    "image": null,
+    "uuid": "566483c2-686f-4c7d-b8df-eb51583b1814",
+    "deletedAt": null,
+    "recordTags": []
+}
