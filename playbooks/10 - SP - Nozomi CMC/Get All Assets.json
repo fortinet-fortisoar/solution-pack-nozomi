@@ -94,21 +94,21 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Start -> Get All Assets",
-            "targetStep": "\/api\/3\/workflow_steps\/6295225d-593c-4446-a9d3-cacef2130071",
-            "sourceStep": "\/api\/3\/workflow_steps\/48e1f454-4866-40b1-b8fa-6d9982bb76e9",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "64f78ddd-dd74-4e45-86aa-86bb266cd1ed"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Get All Assets -> Create Asset Record",
             "targetStep": "\/api\/3\/workflow_steps\/f195117d-641e-4ccb-a6e9-56452390cf9c",
             "sourceStep": "\/api\/3\/workflow_steps\/6295225d-593c-4446-a9d3-cacef2130071",
             "label": null,
             "isExecuted": false,
             "uuid": "01983c12-9aae-41fe-b947-a450f90def53"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Get All Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/6295225d-593c-4446-a9d3-cacef2130071",
+            "sourceStep": "\/api\/3\/workflow_steps\/48e1f454-4866-40b1-b8fa-6d9982bb76e9",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "64f78ddd-dd74-4e45-86aa-86bb266cd1ed"
         }
     ],
     "groups": [],
@@ -118,8 +118,8 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "ManualTrigger",
         "Assets",
+        "ManualTrigger",
         "Nozomi"
     ]
 }

@@ -4,13 +4,15 @@
     "name": "> Create Asset Record",
     "aliasName": null,
     "tag": null,
-    "description": "This PB will create Asset Record",
+    "description": "This PB will create Asset Record and fetch CVEs from Nozomi and correlate Asset with CVEs, ICS Advisory and KEV Alert",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [
-        "assetRecord"
+        "assetRecord",
+        "alertIRI",
+        "parentAssetIRI"
     ],
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
@@ -22,7 +24,8 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "record": "{{vars.input.params.assetRecord}}"
+                "record": "{{vars.input.params.assetRecord}}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
             },
             "status": null,
             "top": "165",
@@ -33,7 +36,7 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get Values",
+            "name": "Get Picklist IRI",
             "description": null,
             "arguments": {
                 "categoryIRI": "{{\"AssetCategory\" | picklist(vars.record.type, \"@id\")}}",
@@ -73,6 +76,12 @@
                     "ip": "{{vars.record.ip | join(', ') }}",
                     "name": "{{vars.record.product_name}}",
                     "level": "{{\"AssetLevel\" | picklist('Level ' + vars.record.level, \"@id\")}}",
+                    "__link": {
+                        "recordTags": [
+                            "\/api\/3\/tags\/Nozomi"
+                        ]
+                    },
+                    "assets": "{{vars.input.params.parentAssetIRI}}",
                     "vendor": "{{vars.record.mac_vendor | join(', ') }}",
                     "category": "{{vars.categoryIRI}}",
                     "firmware": "{{vars.record.os_or_firmware}}",
@@ -89,7 +98,7 @@
                 "__recommend": [],
                 "fieldOperation": {
                     "protocol": "Overwrite",
-                    "recordTags": "Overwrite"
+                    "recordTags": "Append"
                 },
                 "step_variables": []
             },
@@ -99,17 +108,201 @@
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "f32e6a71-6388-4692-b58d-697831d25af3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Correlated Record Of CVEs",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "uuid",
+                            "value": "{{vars.item.uuid}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "iCSAdvisories",
+                        "kEVAlerts"
+                    ]
+                },
+                "module": "c_v_es?$limit=100000&$relationships=true&$fsr_max_relation_count=100",
+                "for_each": {
+                    "item": "{{vars.cVE}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "checkboxFields": true,
+                "step_variables": {
+                    "kevAlert": "{{vars.steps.Get_Correlated_Record_Of_CVEs | flatten | json_query('[*][kEVAlerts][][]') | unique}}",
+                    "iCSAdvisory": "{{vars.steps.Get_Correlated_Record_Of_CVEs | flatten | json_query('[*][iCSAdvisories][][]') | unique}}"
+                }
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "a4dd9491-1135-482e-b5e3-3d05e03c7b5b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Asset With CVEs ICS Advisory and KEV Alert",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "__link": {
+                        "cVEs": "{{vars.cVE | json_query('[*][\"@id\"][]')}}",
+                        "kEVAlerts": "{{vars.kevAlert | json_query('[*][\"@id\"][]') }}",
+                        "iCSAdvisories": "{{vars.iCSAdvisory | json_query('[*][\"@id\"][]') }}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.steps.Create_Assets['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/assets",
+                "fieldOperation": {
+                    "protocol": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "975",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "b6c4e2e3-a19a-4131-8fc6-86da986feb27"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Alert With CVEs And ICS Advisory",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "__link": {
+                        "cVEs": "{{vars.cVE | json_query('[*][\"@id\"][]') }}",
+                        "iCSAdvisories": "{{vars.iCSAdvisory | json_query('[*][\"@id\"][]')}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.params.alertIRI}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/alerts",
+                "fieldOperation": [],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "319cfcce-a7ea-469c-a264-1c5ab3c49c9c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get CVEs By Asset Id",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "vendor": "",
+                    "assetId": "{{vars.record.id}}",
+                    "vendorTag": "{{vars.record.vendor}}",
+                    "applianceId": "{{vars.sourceData['appliance_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": {
+                    "cVE": "{{vars.steps.Get_CVEs_By_Asset_Id['cVEResult']}}"
+                },
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/5a4da070-db21-4fc6-a5a0-6d561939c6d9"
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "a24b2406-e11c-4409-bc97-3ed1a475ed0a"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Output",
+            "description": null,
+            "arguments": {
+                "cVE": "{{vars.cVE}}",
+                "asset": "{{vars.steps.Create_Assets['@id']}}",
+                "assetIRI": "{{vars.steps.Create_Assets['@id']}}",
+                "kevAlert": "{{vars.kevAlert}}",
+                "iCSAdvisory": "{{vars.iCSAdvisory}}"
+            },
+            "status": null,
+            "top": "1110",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "87a5e047-8c65-47bf-8c01-795ea124b8b0"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/392700bd-044b-4b79-a029-91349eff4a82",
-            "sourceStep": "\/api\/3\/workflow_steps\/7efa71c6-7516-496c-84fd-495c2eb0bec4",
+            "name": "Create Assets -> Get CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/a24b2406-e11c-4409-bc97-3ed1a475ed0a",
+            "sourceStep": "\/api\/3\/workflow_steps\/f32e6a71-6388-4692-b58d-697831d25af3",
             "label": null,
             "isExecuted": false,
-            "uuid": "e942ddc5-af2b-46ff-b29c-2c03c682769f"
+            "uuid": "0a9a5e36-4a10-4a51-a10b-57b667b31453"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get CVEs -> Get Correlated Record Of CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/a4dd9491-1135-482e-b5e3-3d05e03c7b5b",
+            "sourceStep": "\/api\/3\/workflow_steps\/a24b2406-e11c-4409-bc97-3ed1a475ed0a",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2481a4ab-09ee-4332-8b74-86df84a836af"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Asset With CVEs ICS Advisory and KEV Alert -> Output",
+            "targetStep": "\/api\/3\/workflow_steps\/87a5e047-8c65-47bf-8c01-795ea124b8b0",
+            "sourceStep": "\/api\/3\/workflow_steps\/b6c4e2e3-a19a-4131-8fc6-86da986feb27",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "4cf843da-2a1a-4f56-8a79-a549d8039bf3"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Correlated Record Of CVEs -> Update Alert With CVEs And ICS Advisory",
+            "targetStep": "\/api\/3\/workflow_steps\/319cfcce-a7ea-469c-a264-1c5ab3c49c9c",
+            "sourceStep": "\/api\/3\/workflow_steps\/a4dd9491-1135-482e-b5e3-3d05e03c7b5b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "756bb7bf-5c31-41f4-a68d-e1b8c5f2062f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Values -> Create",
+            "targetStep": "\/api\/3\/workflow_steps\/f32e6a71-6388-4692-b58d-697831d25af3",
+            "sourceStep": "\/api\/3\/workflow_steps\/6f97dacc-d7e2-4e39-9e06-ccba99ba48ce",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "89f27d7c-31c1-4a30-9a3a-8a85e6876946"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Alert With CVEs And ICS Advisory -> Update Asset With ICS Advisory And KEV Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/b6c4e2e3-a19a-4131-8fc6-86da986feb27",
+            "sourceStep": "\/api\/3\/workflow_steps\/319cfcce-a7ea-469c-a264-1c5ab3c49c9c",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "af387347-cfb0-46c5-88af-7066f9d9df5f"
         },
         {
             "@type": "WorkflowRoute",
@@ -122,12 +315,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Values -> Create",
-            "targetStep": "\/api\/3\/workflow_steps\/f32e6a71-6388-4692-b58d-697831d25af3",
-            "sourceStep": "\/api\/3\/workflow_steps\/6f97dacc-d7e2-4e39-9e06-ccba99ba48ce",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/392700bd-044b-4b79-a029-91349eff4a82",
+            "sourceStep": "\/api\/3\/workflow_steps\/7efa71c6-7516-496c-84fd-495c2eb0bec4",
             "label": null,
             "isExecuted": false,
-            "uuid": "89f27d7c-31c1-4a30-9a3a-8a85e6876946"
+            "uuid": "e942ddc5-af2b-46ff-b29c-2c03c682769f"
         }
     ],
     "groups": [],
@@ -137,7 +330,12 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
+        "Assets",
         "Referenced",
-        "Assets"
+        "Nozomi",
+        "ICS Advisory",
+        "CVE",
+        "KEV",
+        "Alert"
     ]
 }

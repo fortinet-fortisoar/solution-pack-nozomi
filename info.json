@@ -1,10 +1,10 @@
 {
-    "name": "nozmoi",
+    "name": "nozomi",
     "version": "1.0.0",
     "fsrMinCompatibility": "7.2.0",
     "type": "solutionpack",
     "local": true,
-    "label": "Nozmoi",
+    "label": "Nozomi",
     "dependencies": [
         {
             "name": "sOARFramework",
@@ -17,17 +17,29 @@
             "type": "solutionpack",
             "label": "OT - Asset Management",
             "minVersion": null
+        },
+        {
+            "name": "oT-VulnerabilityManagement",
+            "type": "solutionpack",
+            "label": "OT - Vulnerability Management",
+            "minVersion": null
         }
     ],
     "prerequisite": null,
-    "publisher": "Community",
+    "publisher": "Fortinet",
     "description": null,
-    "help": null,
-    "category": [],
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.1.0/docs/README.md",
+    "category": [
+        "Vulnerability and Risk Management",
+        "Vulnerability Management",
+        "Alert Management",
+        "Asset Management",
+        "OT & IoT Security"
+    ],
     "supportInfo": null,
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-03T10:46:43+00:00",
+    "date": "2023-03-23T10:47:13+00:00",
     "contents": {
         "playbooks": [
             {
@@ -44,12 +56,20 @@
         ],
         "connectors": [
             {
-                "name": "Nozomi Networks Central Management Console",
-                "apiName": "nozomi-networks-central-management-console"
+                "name": "Fortinet FortiDeceptor",
+                "apiName": "fortinet-fortideceptor"
             },
             {
-                "name": "Nozomi Networks Guardian",
-                "apiName": "nozomi-networks-guardian"
+                "name": "Fortinet FortiEDR",
+                "apiName": "fortinet-fortiedr"
+            },
+            {
+                "name": "Fortinet FortiGate",
+                "apiName": "fortigate-firewall"
+            },
+            {
+                "name": "Nozomi Networks Central Management Console",
+                "apiName": "nozomi-networks-central-management-console"
             }
         ]
     }

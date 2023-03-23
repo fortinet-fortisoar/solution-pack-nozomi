@@ -362,15 +362,6 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Deploy Decoy -> Set UUID With Decoy Id",
-            "targetStep": "\/api\/3\/workflow_steps\/32c66aca-f19d-4873-94ae-4c93c3856c01",
-            "sourceStep": "\/api\/3\/workflow_steps\/92823c06-9d0b-4343-936a-092c9f27a8bf",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "12949059-1576-48ad-bdfd-b50ae02a86d7"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Raise ServiceNow Ticket -> Add Comment On Alert",
             "targetStep": "\/api\/3\/workflow_steps\/fb4b811b-088c-4de1-9887-7e366552aae4",
             "sourceStep": "\/api\/3\/workflow_steps\/989b03f8-ce72-45c3-b161-53a2955374aa",
@@ -443,6 +434,15 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Deploy Decoy -> Set UUID With Decoy Id",
+            "targetStep": "\/api\/3\/workflow_steps\/32c66aca-f19d-4873-94ae-4c93c3856c01",
+            "sourceStep": "\/api\/3\/workflow_steps\/92823c06-9d0b-4343-936a-092c9f27a8bf",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "c660a7d6-5d39-48b8-845a-586cc5d58a36"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Configuration -> Get Assets",
             "targetStep": "\/api\/3\/workflow_steps\/f9fe78b7-4fc1-4b60-8f85-c530507ef578",
             "sourceStep": "\/api\/3\/workflow_steps\/e957a900-935c-4de0-83cc-bdc2a2e83f73",
@@ -458,8 +458,8 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "ManualTrigger",
         "Alerts",
-        "Assets"
+        "Assets",
+        "ManualTrigger"
     ]
 }

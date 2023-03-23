@@ -1,0 +1,251 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "> Get Node CVEs",
+    "aliasName": null,
+    "tag": null,
+    "description": "This Playbook will get CVE from Nozomi by Appliance Id and Asset Vendor",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "alertData"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/8fc21d3b-6343-4bc3-a0e2-2f88e16195ba",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "sourceData": "{{vars.input.params.alertData.sourcedata | toDict}}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "23f230a2-4113-479c-90a3-dcf6512ecd43"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Correlate Alert With CVEs and ICS Advisory",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per vendor found in affected Assets:<\/p>\n<h4>CVEs<\/h4>\n<p>{% for item in vars.cVEList %}{{loop.index}}: <a href=\"\/modules\/c_v_es\/{{item.uuid}}\">{{item.cVEID}}<br \/><\/a>{% endfor %}<\/p>\n<h4>ICS Advisory<\/h4>\n<p>{% for item in vars.iCSAdvisoryList %}{{loop.index}}: <a href=\"\/modules\/c_v_es\/{{item.uuid}}\">{{item.iCSCERTID}} - {{item. iCSCERTTitle }}<br \/><\/a>{% endfor %}<\/p>",
+                    "records": "{{vars.input.params.alertData['@id']}}"
+                },
+                "resource": {
+                    "__link": {
+                        "cVEs": "{{vars.cVEList | json_query('[*][\"@id\"][]') }}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.params.alertData['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/alerts",
+                "fieldOperation": [],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "515aff6b-c7f0-4149-8654-804155a0df22"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get ICS Advisory By CVE Id",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "c_v_es.cVEID",
+                            "value": "{{vars.item.cVEID}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "iCSCERTID",
+                        "iCSCERTTitle"
+                    ]
+                },
+                "module": "i_c_s_advisories?$limit=10000&$relationships=true&$fsr_max_relation_count=100",
+                "for_each": {
+                    "item": "{{vars.cVEList}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "checkboxFields": true,
+                "step_variables": {
+                    "iCSAdvisoryList": "{{vars.steps.Get_ICS_Advisory_By_CVE_Id | flatten | unique}}"
+                }
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "6978ffb0-2727-4c3e-beb0-5ed111837666"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get CVEs By Vendor",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.assetVendorList}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "arguments": {
+                    "vendor": "{{vars.item}}",
+                    "assetId": "",
+                    "vendorTag": "{{vars.item}}",
+                    "applianceId": "{{vars.sourceData['appliance_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": {
+                    "cVEList": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"cVEResult\"][][]') | unique}}"
+                },
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/5a4da070-db21-4fc6-a5a0-6d561939c6d9"
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "7eb930ac-d754-4a00-b009-3774fdfb6e8b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "8fc21d3b-6343-4bc3-a0e2-2f88e16195ba"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Correlated Assets",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "uuid",
+                            "value": "{{vars.input.params.alertData['uuid']}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "assets"
+                    ]
+                },
+                "module": "alerts?$limit=30&$relationships=true&$fsr_max_relation_count=100",
+                "checkboxFields": true,
+                "step_variables": {
+                    "assetVendorList": "{{vars.steps.Get_Correlated_Assets[0].assets | json_query('[*][\"vendor\"][]') }}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "f7575c8c-df08-4567-97c4-5e800f2e8eef"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/23f230a2-4113-479c-90a3-dcf6512ecd43",
+            "sourceStep": "\/api\/3\/workflow_steps\/8fc21d3b-6343-4bc3-a0e2-2f88e16195ba",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "00e27084-e43e-4457-a059-eb03c2df89b5"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get ICS Advisory By CVE Id -> Correlate CVEs With Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/515aff6b-c7f0-4149-8654-804155a0df22",
+            "sourceStep": "\/api\/3\/workflow_steps\/6978ffb0-2727-4c3e-beb0-5ed111837666",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2abdcbfe-f0af-43f5-b0f4-7133179495ca"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get Correlated Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/f7575c8c-df08-4567-97c4-5e800f2e8eef",
+            "sourceStep": "\/api\/3\/workflow_steps\/23f230a2-4113-479c-90a3-dcf6512ecd43",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2d2fa2c3-a54a-4717-a2c6-b7c5206a1ec2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get CVEs By Vendor -> Get ICS Advisory By CVE",
+            "targetStep": "\/api\/3\/workflow_steps\/6978ffb0-2727-4c3e-beb0-5ed111837666",
+            "sourceStep": "\/api\/3\/workflow_steps\/7eb930ac-d754-4a00-b009-3774fdfb6e8b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "cd3fb82e-9e7c-4ca8-b854-d99ae83bcbc6"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Correlated Assets -> Get CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/7eb930ac-d754-4a00-b009-3774fdfb6e8b",
+            "sourceStep": "\/api\/3\/workflow_steps\/f7575c8c-df08-4567-97c4-5e800f2e8eef",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "d2f83ba6-e0db-41a3-8489-a6a7caa0e461"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "a916932c-840e-43d1-a7d8-ed90bb856438",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CVE",
+        "Referenced",
+        "Alert"
+    ]
+}

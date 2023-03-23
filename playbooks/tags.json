@@ -1,9 +1,16 @@
 [
-    "PostCreate",
     "Alerts",
     "Assets",
-    "nozomi-networks-central-management-console",
-    "Nozomi",
     "ManualTrigger",
-    "Referenced"
+    "Nozomi",
+    "CVE",
+    "Referenced",
+    "Alert",
+    "Appliance",
+    "Nodes",
+    "KEV",
+    "PostCreate",
+    "Events",
+    "Links",
+    "ICS Advisory"
 ]
