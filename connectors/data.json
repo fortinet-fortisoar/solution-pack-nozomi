@@ -1,5 +1,27 @@
 [
     {
+        "name": "code-snippet",
+        "label": "Code Snippet",
+        "category": "utilities",
+        "description": "Execute code snippets as part of your Playbooks",
+        "publisher": null,
+        "operation_roles": [],
+        "configurations": [],
+        "dataImports": [],
+        "install_mode": "rpm"
+    },
+    {
+        "name": "file-content-extraction",
+        "label": "File Content Extraction",
+        "category": "utilities",
+        "description": "Utility to Extract Text, Artifacts and Metadata from almost any file. Internet connectivity is required for the connector to download dependent packages",
+        "publisher": null,
+        "operation_roles": [],
+        "configurations": [],
+        "dataImports": [],
+        "install_mode": "rpm"
+    },
+    {
         "name": "fortinet-fortideceptor",
         "label": "Fortinet FortiDeceptor",
         "category": "Network Security",

@@ -13,16 +13,22 @@
             "minVersion": "2.0.2"
         },
         {
+            "name": "socSimulator",
+            "type": "solutionpack",
+            "label": "SOC Simulator",
+            "minVersion": "1.0.2"
+        },
+        {
             "name": "oT-AssetManagement",
             "type": "solutionpack",
             "label": "OT - Asset Management",
-            "minVersion": null
+            "minVersion": "1.0.0"
         },
         {
             "name": "oT-VulnerabilityManagement",
             "type": "solutionpack",
             "label": "OT - Vulnerability Management",
-            "minVersion": null
+            "minVersion": "1.0.0"
         }
     ],
     "prerequisite": null,
@@ -39,7 +45,7 @@
     "supportInfo": null,
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-23T10:47:13+00:00",
+    "date": "2023-03-28T15:12:53+00:00",
     "contents": {
         "playbooks": [
             {
@@ -56,6 +62,14 @@
         ],
         "connectors": [
             {
+                "name": "Code Snippet",
+                "apiName": "code-snippet"
+            },
+            {
+                "name": "File Content Extraction",
+                "apiName": "file-content-extraction"
+            },
+            {
                 "name": "Fortinet FortiDeceptor",
                 "apiName": "fortinet-fortideceptor"
             },
@@ -70,6 +84,13 @@
             {
                 "name": "Nozomi Networks Central Management Console",
                 "apiName": "nozomi-networks-central-management-console"
+            }
+        ],
+        "recordSets": [
+            {
+                "name": "Scenario",
+                "apiName": "scenario",
+                "count": 1
             }
         ]
     }

@@ -11,37 +11,10 @@
     "remoteExecutableFlag": false,
     "parameters": [],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/48e1f454-4866-40b1-b8fa-6d9982bb76e9",
+    "triggerStep": "\/api\/3\/workflow_steps\/7ad25e2f-95d5-4da5-afed-ae1dc43673da",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Start",
-            "description": null,
-            "arguments": {
-                "route": "07c118f4-4567-48bf-994c-2a2777c1a224",
-                "resources": [
-                    "assets"
-                ],
-                "inputVariables": [],
-                "step_variables": {
-                    "input": {
-                        "params": [],
-                        "records": "{{vars.input.records}}"
-                    }
-                },
-                "executeButtonText": "Execute",
-                "noRecordExecution": true,
-                "singleRecordExecution": false
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
-            "group": null,
-            "uuid": "48e1f454-4866-40b1-b8fa-6d9982bb76e9"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Get All Assets",
@@ -62,7 +35,34 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
-            "uuid": "6295225d-593c-4446-a9d3-cacef2130071"
+            "uuid": "4fb44e6c-1151-4829-b4fd-bdbfaddbee41"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "852f0f05-4de9-4179-a821-5a887ae00dcc",
+                "resources": [
+                    "assets"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "7ad25e2f-95d5-4da5-afed-ae1dc43673da"
         },
         {
             "@type": "WorkflowStep",
@@ -81,45 +81,45 @@
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": false,
-                "workflowReference": "\/api\/3\/workflows\/9eb98a74-ab4e-4c7b-8ea9-5577ff7eb8ac"
+                "workflowReference": "\/api\/3\/workflows\/36fc2c07-640b-4a41-9633-bcadf175db14"
             },
             "status": null,
             "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "f195117d-641e-4ccb-a6e9-56452390cf9c"
+            "uuid": "901c0eb6-4afe-40d2-9af8-3f499ff39354"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "Get All Assets -> Create Asset Record",
-            "targetStep": "\/api\/3\/workflow_steps\/f195117d-641e-4ccb-a6e9-56452390cf9c",
-            "sourceStep": "\/api\/3\/workflow_steps\/6295225d-593c-4446-a9d3-cacef2130071",
+            "targetStep": "\/api\/3\/workflow_steps\/901c0eb6-4afe-40d2-9af8-3f499ff39354",
+            "sourceStep": "\/api\/3\/workflow_steps\/4fb44e6c-1151-4829-b4fd-bdbfaddbee41",
             "label": null,
             "isExecuted": false,
-            "uuid": "01983c12-9aae-41fe-b947-a450f90def53"
+            "uuid": "432a5c3c-ac12-443e-b48e-4058e22b8c97"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Get All Assets",
-            "targetStep": "\/api\/3\/workflow_steps\/6295225d-593c-4446-a9d3-cacef2130071",
-            "sourceStep": "\/api\/3\/workflow_steps\/48e1f454-4866-40b1-b8fa-6d9982bb76e9",
+            "targetStep": "\/api\/3\/workflow_steps\/4fb44e6c-1151-4829-b4fd-bdbfaddbee41",
+            "sourceStep": "\/api\/3\/workflow_steps\/7ad25e2f-95d5-4da5-afed-ae1dc43673da",
             "label": null,
             "isExecuted": false,
-            "uuid": "64f78ddd-dd74-4e45-86aa-86bb266cd1ed"
+            "uuid": "5591c564-39e4-48ee-a19c-7b9a96f3babf"
         }
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-    "uuid": "77ea779b-8a13-4806-887f-8f459a899978",
+    "uuid": "7328ac04-ee2d-4ca0-ad03-705364ad3341",
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Assets",
         "ManualTrigger",
+        "Assets",
         "Nozomi"
     ]
 }

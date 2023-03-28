@@ -11,16 +11,16 @@
     "remoteExecutableFlag": false,
     "parameters": [],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/1eb3ae33-0b11-4959-97fd-25c6c5ada67c",
+    "triggerStep": "\/api\/3\/workflow_steps\/f928f2fe-0789-455a-b955-4478684d9f96",
     "steps": [
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "6c4cee8c-8f34-4cb8-b9e2-4008024eefb1",
+                "route": "c6c6638d-e70b-41ef-9fac-182de7ced7b6",
                 "resources": [
                     "alerts"
                 ],
@@ -48,7 +48,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "1eb3ae33-0b11-4959-97fd-25c6c5ada67c"
+            "uuid": "f928f2fe-0789-455a-b955-4478684d9f96"
         },
         {
             "@type": "WorkflowStep",
@@ -62,7 +62,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "32c66aca-f19d-4873-94ae-4c93c3856c01"
+            "uuid": "1021bb13-ab0d-4673-98d4-e22c94efd395"
         },
         {
             "@type": "WorkflowStep",
@@ -104,7 +104,7 @@
             "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "6348ff62-8154-4f10-834d-4cf035b3cd7b"
+            "uuid": "39e7a925-e753-4744-b6a6-ad5a4956603a"
         },
         {
             "@type": "WorkflowStep",
@@ -141,7 +141,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
-            "uuid": "92823c06-9d0b-4343-936a-092c9f27a8bf"
+            "uuid": "91912da8-91b4-49db-91e4-5d5a7c7d513f"
         },
         {
             "@type": "WorkflowStep",
@@ -178,7 +178,7 @@
             "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
-            "uuid": "989b03f8-ce72-45c3-b161-53a2955374aa"
+            "uuid": "2338c874-8d7a-480c-b799-a983fbda44f1"
         },
         {
             "@type": "WorkflowStep",
@@ -215,7 +215,7 @@
             "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "b6ffd179-c567-4b6c-84bb-bdb7d486edb1"
+            "uuid": "2ea85c65-f546-4d3c-a490-5a5c80bdada0"
         },
         {
             "@type": "WorkflowStep",
@@ -231,7 +231,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "e957a900-935c-4de0-83cc-bdc2a2e83f73"
+            "uuid": "ac207caa-e22f-49fb-9c76-1b7f10fb110c"
         },
         {
             "@type": "WorkflowStep",
@@ -260,7 +260,7 @@
             "left": "1020",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "f2b81314-5d35-4580-a8bb-c1002bb3fc15"
+            "uuid": "26883260-9707-42a0-a3f4-3792950b1ff9"
         },
         {
             "@type": "WorkflowStep",
@@ -295,7 +295,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "f9fe78b7-4fc1-4b60-8f85-c530507ef578"
+            "uuid": "49777bce-a442-4765-bd1a-f59477453b4d"
         },
         {
             "@type": "WorkflowStep",
@@ -324,7 +324,7 @@
             "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "fb4b811b-088c-4de1-9887-7e366552aae4"
+            "uuid": "a1f82a89-73d2-4bfe-9c73-cbd9c64ca344"
         },
         {
             "@type": "WorkflowStep",
@@ -356,110 +356,110 @@
             "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
-            "uuid": "feb28d35-726c-47cc-86eb-b31a58abf27a"
+            "uuid": "38cb7c01-11bc-494d-9d47-4f83efda58b6"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Raise ServiceNow Ticket -> Add Comment On Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/fb4b811b-088c-4de1-9887-7e366552aae4",
-            "sourceStep": "\/api\/3\/workflow_steps\/989b03f8-ce72-45c3-b161-53a2955374aa",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "1a6790ec-942b-4493-83bf-99fd5aa341c3"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Set UUID With Decoy Id -> Add Comment On Asset",
-            "targetStep": "\/api\/3\/workflow_steps\/b6ffd179-c567-4b6c-84bb-bdb7d486edb1",
-            "sourceStep": "\/api\/3\/workflow_steps\/32c66aca-f19d-4873-94ae-4c93c3856c01",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "1ea1590e-c1be-43fe-a640-bfe3ba915fc0"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/e957a900-935c-4de0-83cc-bdc2a2e83f73",
-            "sourceStep": "\/api\/3\/workflow_steps\/1eb3ae33-0b11-4959-97fd-25c6c5ada67c",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "27cca453-f89e-4c6d-871d-abdaca340dd2"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Get Assets -> Deploy Decoy",
-            "targetStep": "\/api\/3\/workflow_steps\/92823c06-9d0b-4343-936a-092c9f27a8bf",
-            "sourceStep": "\/api\/3\/workflow_steps\/f9fe78b7-4fc1-4b60-8f85-c530507ef578",
+            "targetStep": "\/api\/3\/workflow_steps\/91912da8-91b4-49db-91e4-5d5a7c7d513f",
+            "sourceStep": "\/api\/3\/workflow_steps\/49777bce-a442-4765-bd1a-f59477453b4d",
             "label": null,
             "isExecuted": false,
-            "uuid": "5afc93b0-6447-4c3b-93f6-f7e16881696e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Update Asset State -> Raise ServiceNow Ticket",
-            "targetStep": "\/api\/3\/workflow_steps\/989b03f8-ce72-45c3-b161-53a2955374aa",
-            "sourceStep": "\/api\/3\/workflow_steps\/6348ff62-8154-4f10-834d-4cf035b3cd7b",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "657fb263-6564-4b3d-b0a7-3da653b5fb32"
+            "uuid": "2f5e6272-c936-478e-a261-2f6da8136937"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Add Comment On Asset -> Quarantine Asset In FortiEDR",
-            "targetStep": "\/api\/3\/workflow_steps\/feb28d35-726c-47cc-86eb-b31a58abf27a",
-            "sourceStep": "\/api\/3\/workflow_steps\/b6ffd179-c567-4b6c-84bb-bdb7d486edb1",
+            "targetStep": "\/api\/3\/workflow_steps\/38cb7c01-11bc-494d-9d47-4f83efda58b6",
+            "sourceStep": "\/api\/3\/workflow_steps\/2ea85c65-f546-4d3c-a490-5a5c80bdada0",
             "label": null,
             "isExecuted": false,
-            "uuid": "8a2ee6ad-a23f-42c0-a96b-38f82ed0872f"
+            "uuid": "4f88b499-1c5d-494a-b675-f328824d69a3"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Add Asset Comment On Alert -> Add Decoy Comment On Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/f2b81314-5d35-4580-a8bb-c1002bb3fc15",
-            "sourceStep": "\/api\/3\/workflow_steps\/fb4b811b-088c-4de1-9887-7e366552aae4",
+            "targetStep": "\/api\/3\/workflow_steps\/26883260-9707-42a0-a3f4-3792950b1ff9",
+            "sourceStep": "\/api\/3\/workflow_steps\/a1f82a89-73d2-4bfe-9c73-cbd9c64ca344",
             "label": null,
             "isExecuted": false,
-            "uuid": "9c7cfa8a-8db0-4bbf-ae15-81c28336cc3c"
+            "uuid": "5fad7624-ab24-43d1-8215-153425a035f6"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Quarantine Asset In FortiEDR -> Update Asset State",
-            "targetStep": "\/api\/3\/workflow_steps\/6348ff62-8154-4f10-834d-4cf035b3cd7b",
-            "sourceStep": "\/api\/3\/workflow_steps\/feb28d35-726c-47cc-86eb-b31a58abf27a",
+            "name": "Raise ServiceNow Ticket -> Add Comment On Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/a1f82a89-73d2-4bfe-9c73-cbd9c64ca344",
+            "sourceStep": "\/api\/3\/workflow_steps\/2338c874-8d7a-480c-b799-a983fbda44f1",
             "label": null,
             "isExecuted": false,
-            "uuid": "c43494ee-d211-42bd-b093-9eaba0c9a3c6"
+            "uuid": "72fe950c-47c0-4399-b13e-5ecd18de2958"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Set UUID With Decoy Id -> Add Comment On Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/2ea85c65-f546-4d3c-a490-5a5c80bdada0",
+            "sourceStep": "\/api\/3\/workflow_steps\/1021bb13-ab0d-4673-98d4-e22c94efd395",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "7490e1af-a7df-4a24-a58c-c198d1a69bd5"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Deploy Decoy -> Set UUID With Decoy Id",
-            "targetStep": "\/api\/3\/workflow_steps\/32c66aca-f19d-4873-94ae-4c93c3856c01",
-            "sourceStep": "\/api\/3\/workflow_steps\/92823c06-9d0b-4343-936a-092c9f27a8bf",
+            "targetStep": "\/api\/3\/workflow_steps\/1021bb13-ab0d-4673-98d4-e22c94efd395",
+            "sourceStep": "\/api\/3\/workflow_steps\/91912da8-91b4-49db-91e4-5d5a7c7d513f",
             "label": null,
             "isExecuted": false,
-            "uuid": "c660a7d6-5d39-48b8-845a-586cc5d58a36"
+            "uuid": "83e8316d-475d-4bc7-9c4c-d68468fd41f7"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/ac207caa-e22f-49fb-9c76-1b7f10fb110c",
+            "sourceStep": "\/api\/3\/workflow_steps\/f928f2fe-0789-455a-b955-4478684d9f96",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "8bcec408-d9cb-4f31-9613-b9f2b724c898"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Quarantine Asset In FortiEDR -> Update Asset State",
+            "targetStep": "\/api\/3\/workflow_steps\/39e7a925-e753-4744-b6a6-ad5a4956603a",
+            "sourceStep": "\/api\/3\/workflow_steps\/38cb7c01-11bc-494d-9d47-4f83efda58b6",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "a4070110-d0a3-460e-b58c-452545d28909"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Get Assets",
-            "targetStep": "\/api\/3\/workflow_steps\/f9fe78b7-4fc1-4b60-8f85-c530507ef578",
-            "sourceStep": "\/api\/3\/workflow_steps\/e957a900-935c-4de0-83cc-bdc2a2e83f73",
+            "targetStep": "\/api\/3\/workflow_steps\/49777bce-a442-4765-bd1a-f59477453b4d",
+            "sourceStep": "\/api\/3\/workflow_steps\/ac207caa-e22f-49fb-9c76-1b7f10fb110c",
             "label": null,
             "isExecuted": false,
-            "uuid": "d730e7e7-07ac-48b2-b3ad-e78fdc56f453"
+            "uuid": "db264b1e-5e24-42c6-81f9-ce79392a52a2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Asset State -> Raise ServiceNow Ticket",
+            "targetStep": "\/api\/3\/workflow_steps\/2338c874-8d7a-480c-b799-a983fbda44f1",
+            "sourceStep": "\/api\/3\/workflow_steps\/39e7a925-e753-4744-b6a6-ad5a4956603a",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "eed6d62d-852a-4758-b3a1-46ecd367f25d"
         }
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-    "uuid": "53ed3eae-a47a-4200-8630-e5957c5e9e3f",
+    "uuid": "3490f002-21bf-4c2a-97dd-f9a4538b4e27",
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
+        "ManualTrigger",
         "Alerts",
-        "Assets",
-        "ManualTrigger"
+        "Assets"
     ]
 }

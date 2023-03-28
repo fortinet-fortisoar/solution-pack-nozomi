@@ -1,0 +1,556 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "> Get Assets Details",
+    "aliasName": null,
+    "tag": null,
+    "description": "This Playbook will fetch assets based on IP address.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "alertData"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/628f0b6f-bfaa-4d3c-970b-2fb8c4f37f66",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Summary For Assets",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">KEV Alert<\/span> as per CVEs fetched from Nozomi for this Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<th>KEV Alert<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n{% set data = item.kEVAlerts | json_query(\"[?contains(recordTags, '\"+ics.iCSCERTID+\"')]\")%}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n{% if data | length > 0 %}\n <td><a href=\"\/modules\/k_e_v_alerts\/{{data[0]['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{data[0]['title']}}<\/a><\/td>\n{% else %}\n<td align=\"center\">-<\/td>\n{% endif %}\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "30",
+            "left": "135",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "0c7ed7a0-e4d9-4b15-b998-6de82b33e26b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Destination Indicator By IP",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "object",
+                            "field": "typeofindicator",
+                            "value": "\/api\/3\/picklists\/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                                "itemValue": "IP Address"
+                            },
+                            "operator": "eq"
+                        },
+                        {
+                            "type": "primitive",
+                            "field": "value",
+                            "value": "{{vars.sourceData['ip_dst']}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "id"
+                    ]
+                },
+                "module": "indicators?$limit=10000",
+                "do_until": {
+                    "delay": 3,
+                    "retries": 2,
+                    "condition": "{{vars.steps.Get_Destination_Indicator_By_IP | length > 0}}"
+                },
+                "checkboxFields": true,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "b3578659-1ee9-40bd-8817-3e6022a79b4c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Not Found Destination Asset",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "ip": "{{vars.sourceData['ip_dst']}}",
+                    "name": "{{vars.sourceData['ip_dst']}}",
+                    "alerts": "{{vars.input.params.alertData['@id']}}",
+                    "__replace": "",
+                    "indicators": "{{vars.steps.Get_Destination_Indicator_By_IP[0]['@id']}}",
+                    "macAddress": "{{vars.sourceData['mac_dst']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/assets",
+                "__recommend": [],
+                "fieldOperation": {
+                    "protocol": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "01e45a2c-5648-4f4b-8468-8d656a08001b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Assets",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.steps.Get_Assets.data.result}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "arguments": {
+                    "alertIRI": "{{vars.input.params.alertData['@id']}}",
+                    "assetRecord": "{{vars.item}}",
+                    "parentAssetIRI": ""
+                },
+                "apply_async": false,
+                "step_variables": {
+                    "cVE": "{{vars.steps.Create_Assets | json_query('[*][\"cVE\"][][]') | unique}}"
+                },
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/36fc2c07-640b-4a41-9633-bcadf175db14"
+            },
+            "status": null,
+            "top": "580",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "1d9db7f1-5b6a-4bc7-b149-f3efc890c14c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment On Asset",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "assets": "{{vars.assetIRI}}",
+                    "people": [],
+                    "content": "<p>{{vars.steps.Summary_For_Assets.data['formatted_string']}}<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "135",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "300480bb-9659-4d3c-a1d0-9df6292a83df"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Destination Asset Found",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/1d9db7f1-5b6a-4bc7-b149-f3efc890c14c",
+                        "condition": "{{ vars.sourceData['mac_dst'] is in(vars.foundMacAddress) }}",
+                        "step_name": "Create Assets"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/b3578659-1ee9-40bd-8817-3e6022a79b4c",
+                        "step_name": "Get Indicator By IP"
+                    }
+                ]
+            },
+            "status": null,
+            "top": "435",
+            "left": "310",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "b5df67f2-c5fb-45ce-b826-9160b4f77d74"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment On Alert",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>{{vars.steps.Summary_For_Alert.data['formatted_string']}}<\/p>",
+                    "records": "{{vars.input.params.alertData['@id']}}"
+                },
+                "resource": {
+                    "__link": {
+                        "cVEs": "{{vars.cVE | json_query('[*][\"@id\"][]') }}",
+                        "iCSAdvisories": "{{vars.cVE | json_query('[*][\"iCSAdvisories\"][][][\"@id\"][]') }}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.params.alertData['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/alerts",
+                "fieldOperation": [],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "129d8d9d-2808-4efd-87e9-eae44e5cca3e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "sourceData": "{{vars.input.params.alertData['sourcedata'] | toDict}}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "485",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "6cf884ec-750c-40e9-ace0-b47397d31e51"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Assets",
+            "description": null,
+            "arguments": {
+                "name": "Nozomi Networks Central Management Console",
+                "config": "b7cfa08d-0c1d-40a0-8ad9-efe8f6ca7e33",
+                "params": {
+                    "level": "",
+                    "query": "| where mac_address include? {{vars.sourceData['mac_src']}} OR mac_address include? {{vars.sourceData['mac_dst']}}",
+                    "max_assets": "",
+                    "asset_types": "",
+                    "appliance_ids": "{{vars.sourceData['appliance_id']}}"
+                },
+                "version": "1.0.0",
+                "connector": "nozomi-networks-central-management-console",
+                "operation": "get_assets",
+                "mock_result": "{\n  \"data\": {\n    \"total\": 1,\n    \"header\": [\n      \"name\",\n      \"level\",\n      \"appliance_hosts\",\n      \"ip\",\n      \"mac_address\",\n      \"mac_vendor\",\n      \"os\",\n      \"roles\",\n      \"vendor\",\n      \"firmware_version\",\n      \"os_or_firmware\",\n      \"serial_number\",\n      \"product_name\",\n      \"type\",\n      \"protocols\",\n      \"nodes\",\n      \"custom_fields\",\n      \"deleted_at\",\n      \"time\",\n      \"synchronized\",\n      \"replicated\",\n      \"appliance_id\",\n      \"appliance_ip\",\n      \"appliance_host\",\n      \"mac_address_level\",\n      \"id\",\n      \"vendor:info\",\n      \"firmware_version:info\",\n      \"product_name:info\",\n      \"serial_number:info\",\n      \"type:info\",\n      \"capture_device\",\n      \"vlan_id\",\n      \"zones\",\n      \"created_at\",\n      \"fields\",\n      \"last_activity_time\",\n      \"appliance_sites\",\n      \"end_of_sale_date\",\n      \"end_of_sale_date:info\",\n      \"end_of_support_date\",\n      \"end_of_support_date:info\",\n      \"lifecycle\",\n      \"lifecycle:info\",\n      \"is_ai_enriched\",\n      \"os:info\"\n    ],\n    \"result\": [\n      {\n        \"id\": \"5683d2cd-dbd1-4666-89ab-fa61359d08af\",\n        \"ip\": [\n          \"10.132.254.110\"\n        ],\n        \"os\": \"Windows 11 \/ 10 \/ Server 2016 \/ Server 2019 \/ Server 2022\",\n        \"name\": \"FSR-PROD-WIN10\",\n        \"time\": 1679481109061,\n        \"type\": \"computer\",\n        \"level\": \"\",\n        \"nodes\": [\n          \"10.132.254.110\"\n        ],\n        \"roles\": [\n          \"other\"\n        ],\n        \"zones\": [\n          \"10.132.0.0\/16\"\n        ],\n        \"fields\": {},\n        \"vendor\": \"Siemens\",\n        \"os:info\": {\n          \"source\": \"passive\"\n        },\n        \"vlan_id\": [],\n        \"product_name\": \"FSR-PROD-WIN10\",\n        \"lifecycle\": \"\",\n        \"protocols\": [\n          \"browser\",\n          \"igmp\",\n          \"llmnr\",\n          \"mdns\",\n          \"netbios-ns\",\n          \"ssdp\"\n        ],\n        \"type:info\": {\n          \"source\": \"passive\"\n        },\n        \"created_at\": 1670564522905,\n        \"deleted_at\": 0,\n        \"mac_vendor\": [\n          \"Siemens\"\n        ],\n        \"replicated\": false,\n        \"mac_address\": [\n          \"00:0c:29:5f:74:57\"\n        ],\n        \"vendor:info\": {\n          \"source\": \"passive\",\n          \"confidence\": \"good\",\n          \"granularity\": \"complete\"\n        },\n        \"_asset_kb_id\": \"not_matched\",\n        \"appliance_id\": \"1fb4918e-ed88-4717-82ec-28fec97dd6be\",\n        \"appliance_ip\": \"10.132.254.15\",\n        \"product_name\": \"\",\n        \"synchronized\": false,\n        \"custom_fields\": {},\n        \"serial_number\": \"\",\n        \"appliance_host\": \"nozomi-n2os.local\",\n        \"capture_device\": \"em1\",\n        \"is_ai_enriched\": false,\n        \"lifecycle:info\": {\n          \"source\": \"passive\"\n        },\n        \"os_or_firmware\": \"Windows 11 \/ 10 \/ Server 2016 \/ Server 2019 \/ Server 2022 \/ Server\",\n        \"appliance_hosts\": [\n          \"nozomi-n2os.local\"\n        ],\n        \"appliance_sites\": [],\n        \"end_of_sale_date\": 0,\n        \"firmware_version\": \"\",\n        \"mac_address_level\": {\n          \"00:0c:29:5f:74:57\": \"confirmed\"\n        },\n        \"product_name:info\": {\n          \"source\": \"passive\"\n        },\n        \"last_activity_time\": 1679481098061,\n        \"serial_number:info\": {\n          \"source\": \"passive\"\n        },\n        \"end_of_support_date\": 0,\n        \"end_of_sale_date:info\": {\n          \"source\": \"passive\"\n        },\n        \"firmware_version:info\": {\n          \"source\": \"passive\"\n        },\n        \"end_of_support_date:info\": {\n          \"source\": \"passive\"\n        }\n      }\n    ]\n  }\n}",
+                "operationTitle": "Get Assets List",
+                "pickFromTenant": false,
+                "step_variables": {
+                    "foundMacAddress": "{{vars.steps.Get_Assets.data.result | json_query('[*][\"mac_address\"][][]')}}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "485",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "94529f68-1a03-45b4-ba02-60c17d788d4b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Not Found Source Asset",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "ip": "{{vars.sourceData['ip_src']}}",
+                    "name": "{{vars.sourceData['ip_src']}}",
+                    "alerts": "{{vars.input.params.alertData['@id']}}",
+                    "__replace": "",
+                    "indicators": "{{vars.steps.Get_Source_Indicator_By_IP[0]['@id']}}",
+                    "macAddress": "{{vars.sourceData['mac_src']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/assets",
+                "__recommend": [],
+                "fieldOperation": {
+                    "protocol": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "700",
+            "left": "840",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "afe6ead2-7186-4ba0-a64e-f441264009f2"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Summary For Alert",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per Affected Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "700",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "5cf0ab9d-1ff0-4784-bc2e-289f13013191"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Indicator By IP",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "object",
+                            "field": "typeofindicator",
+                            "value": "\/api\/3\/picklists\/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                                "itemValue": "IP Address"
+                            },
+                            "operator": "eq"
+                        },
+                        {
+                            "type": "primitive",
+                            "field": "value",
+                            "value": "{{vars.sourceData['ip_src']}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "id"
+                    ]
+                },
+                "module": "indicators?$limit=10000",
+                "do_until": {
+                    "delay": 3,
+                    "retries": 2,
+                    "condition": "{{vars.steps.Get_Source_Indicator_By_IP | length > 0}}"
+                },
+                "checkboxFields": true,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "580",
+            "left": "840",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "e52cce7c-938c-43a4-a124-9ce96f70647a"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Source Asset Found",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/1d9db7f1-5b6a-4bc7-b149-f3efc890c14c",
+                        "condition": "{{ vars.sourceData['mac_src'] is in(vars.foundMacAddress) }}",
+                        "step_name": "Create Assets"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/e52cce7c-938c-43a4-a124-9ce96f70647a",
+                        "step_name": "Get Source Indicator By IP"
+                    }
+                ]
+            },
+            "status": null,
+            "top": "435",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "22feb182-a951-422c-b808-62d2e3ad050c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "485",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "628f0b6f-bfaa-4d3c-970b-2fb8c4f37f66"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Assets -> Summary For Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/5cf0ab9d-1ff0-4784-bc2e-289f13013191",
+            "sourceStep": "\/api\/3\/workflow_steps\/1d9db7f1-5b6a-4bc7-b149-f3efc890c14c",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "7fb6539e-d863-4714-8296-e0eb92bcf4b6"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/6cf884ec-750c-40e9-ace0-b47397d31e51",
+            "sourceStep": "\/api\/3\/workflow_steps\/628f0b6f-bfaa-4d3c-970b-2fb8c4f37f66",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2c1e224b-e3a2-458c-95d4-268c5dccd02e"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Summary -> Add Comment On Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/300480bb-9659-4d3c-a1d0-9df6292a83df",
+            "sourceStep": "\/api\/3\/workflow_steps\/0c7ed7a0-e4d9-4b15-b998-6de82b33e26b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "1ecfe82d-a092-4353-92ff-19b70fe7d363"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/94529f68-1a03-45b4-ba02-60c17d788d4b",
+            "sourceStep": "\/api\/3\/workflow_steps\/6cf884ec-750c-40e9-ace0-b47397d31e51",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "3ed3fd4b-938e-4462-a642-481ae12f9e88"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Summary For Alert -> Add Comment On Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/129d8d9d-2808-4efd-87e9-eae44e5cca3e",
+            "sourceStep": "\/api\/3\/workflow_steps\/5cf0ab9d-1ff0-4784-bc2e-289f13013191",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "d346cff8-120c-4f79-ad82-55d68cedcb69"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Destination Asset Found -> Create Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/1d9db7f1-5b6a-4bc7-b149-f3efc890c14c",
+            "sourceStep": "\/api\/3\/workflow_steps\/b5df67f2-c5fb-45ce-b826-9160b4f77d74",
+            "label": "Yes",
+            "isExecuted": false,
+            "uuid": "9f0c95ef-32c5-4a1f-8784-94b4b4806ff1"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Source Asset Found -> Get Source Indicator By IP",
+            "targetStep": "\/api\/3\/workflow_steps\/e52cce7c-938c-43a4-a124-9ce96f70647a",
+            "sourceStep": "\/api\/3\/workflow_steps\/22feb182-a951-422c-b808-62d2e3ad050c",
+            "label": "No",
+            "isExecuted": false,
+            "uuid": "5948e068-f93b-4865-8a3e-1f68edf6a07b"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Assets -> Is Destination Asset Found",
+            "targetStep": "\/api\/3\/workflow_steps\/b5df67f2-c5fb-45ce-b826-9160b4f77d74",
+            "sourceStep": "\/api\/3\/workflow_steps\/94529f68-1a03-45b4-ba02-60c17d788d4b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "1258381a-a474-4533-873c-154a6513a7ca"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Indicator By IP -> Create Not Found Source Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/afe6ead2-7186-4ba0-a64e-f441264009f2",
+            "sourceStep": "\/api\/3\/workflow_steps\/e52cce7c-938c-43a4-a124-9ce96f70647a",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "73dc49b9-072a-4877-b7f6-b992afe450bd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Destination Asset Found -> Get Indicator By IP",
+            "targetStep": "\/api\/3\/workflow_steps\/b3578659-1ee9-40bd-8817-3e6022a79b4c",
+            "sourceStep": "\/api\/3\/workflow_steps\/b5df67f2-c5fb-45ce-b826-9160b4f77d74",
+            "label": "No",
+            "isExecuted": false,
+            "uuid": "be00d570-0499-4e4f-8618-787ca095b8e3"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Source Asset Found -> Create Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/1d9db7f1-5b6a-4bc7-b149-f3efc890c14c",
+            "sourceStep": "\/api\/3\/workflow_steps\/22feb182-a951-422c-b808-62d2e3ad050c",
+            "label": "Yes",
+            "isExecuted": false,
+            "uuid": "9afcb7d2-e11f-4bc1-9ea0-6c3c7e2dd042"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Assets -> Is Source Asset Found",
+            "targetStep": "\/api\/3\/workflow_steps\/22feb182-a951-422c-b808-62d2e3ad050c",
+            "sourceStep": "\/api\/3\/workflow_steps\/94529f68-1a03-45b4-ba02-60c17d788d4b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "ff8a5301-b933-409e-b357-3426df48dec8"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Indicator By IP -> Create Not Found Destination Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/01e45a2c-5648-4f4b-8468-8d656a08001b",
+            "sourceStep": "\/api\/3\/workflow_steps\/b3578659-1ee9-40bd-8817-3e6022a79b4c",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "4c05c048-0208-4dcd-9586-63c9bd05dfdb"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "9429e23a-2b6d-4a62-b1f3-49e1896f2347",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "Alerts",
+        "Referenced",
+        "Assets",
+        "Nozomi"
+    ]
+}

@@ -11,9 +11,9 @@
     "remoteExecutableFlag": false,
     "parameters": [],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/360ce043-3ad8-4269-890a-936f8afa4643",
+    "triggerStep": "\/api\/3\/workflow_steps\/460300eb-79e1-4d8a-8963-75e4eccdfa98",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -27,7 +27,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "053de242-dab2-4bba-92f5-be3174b19c31"
+            "uuid": "0ae118b4-4f4c-488b-96f7-c694860302dc"
         },
         {
             "@type": "WorkflowStep",
@@ -73,7 +73,36 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/ea155646-3821-4542-9702-b246da430a8d",
             "group": null,
-            "uuid": "360ce043-3ad8-4269-890a-936f8afa4643"
+            "uuid": "460300eb-79e1-4d8a-8963-75e4eccdfa98"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Asset With KEV Alert_ICS Advisory_CVEs",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
+                "resource": {
+                    "__link": {
+                        "cVEs": "{{vars.cVEIRI}}",
+                        "kEVAlerts": "{{vars.kEVAlertIRI}}",
+                        "iCSAdvisories": "{{vars.iCSAdvisoryIRI}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.record[\"@id\"]}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/assets",
+                "fieldOperation": {
+                    "protocol": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "4a3b2798-ea48-44c4-b4de-5606dcecaeac"
         },
         {
             "@type": "WorkflowStep",
@@ -111,36 +140,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "3843fc43-aa51-4cc8-b109-d773ed8acccd"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Asset With KEV Alert_ICS Advisory_CVEs",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
-                "resource": {
-                    "__link": {
-                        "cVEs": "{{vars.cVEIRI}}",
-                        "kEVAlerts": "{{vars.kEVAlertIRI}}",
-                        "iCSAdvisories": "{{vars.iCSAdvisoryIRI}}"
-                    }
-                },
-                "operation": "Append",
-                "collection": "{{vars.record[\"@id\"]}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/assets",
-                "fieldOperation": {
-                    "protocol": "Append"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "513bdacf-7ac3-46c8-ac7a-d7512d83700f"
+            "uuid": "b061f2a4-cdab-46db-97a2-3114cd33d629"
         },
         {
             "@type": "WorkflowStep",
@@ -170,57 +170,57 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "a60e5f9f-3547-410a-b5bd-254f747f5fff"
+            "uuid": "b8ad6c76-96fc-4ccb-93ae-83caf52a807b"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/053de242-dab2-4bba-92f5-be3174b19c31",
-            "sourceStep": "\/api\/3\/workflow_steps\/360ce043-3ad8-4269-890a-936f8afa4643",
+            "name": "Configuration -> Get KEV Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/b061f2a4-cdab-46db-97a2-3114cd33d629",
+            "sourceStep": "\/api\/3\/workflow_steps\/0ae118b4-4f4c-488b-96f7-c694860302dc",
             "label": null,
             "isExecuted": false,
-            "uuid": "0c4c37f2-f021-4adc-aec2-d7394559b647"
+            "uuid": "0e68bbd4-ba7e-4029-8478-359fb7f03bea"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get KEV Alert -> Update Asset With KEV Alert_ICS Advisory_CVEs",
-            "targetStep": "\/api\/3\/workflow_steps\/513bdacf-7ac3-46c8-ac7a-d7512d83700f",
-            "sourceStep": "\/api\/3\/workflow_steps\/3843fc43-aa51-4cc8-b109-d773ed8acccd",
+            "targetStep": "\/api\/3\/workflow_steps\/4a3b2798-ea48-44c4-b4de-5606dcecaeac",
+            "sourceStep": "\/api\/3\/workflow_steps\/b061f2a4-cdab-46db-97a2-3114cd33d629",
             "label": null,
             "isExecuted": false,
-            "uuid": "93e56e12-ce4a-4974-9632-860d2a90296c"
+            "uuid": "5a8b84f7-3b3a-45fe-b4ee-187359eacfa0"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Get KEV Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/3843fc43-aa51-4cc8-b109-d773ed8acccd",
-            "sourceStep": "\/api\/3\/workflow_steps\/053de242-dab2-4bba-92f5-be3174b19c31",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/0ae118b4-4f4c-488b-96f7-c694860302dc",
+            "sourceStep": "\/api\/3\/workflow_steps\/460300eb-79e1-4d8a-8963-75e4eccdfa98",
             "label": null,
             "isExecuted": false,
-            "uuid": "e154c22b-2d52-4ba6-942e-56a7b5c8b45b"
+            "uuid": "5b490e1f-588f-43c8-b525-554d25315717"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Update Asset With KEV Alert_ICS Advisory_CVEs -> Add Comment",
-            "targetStep": "\/api\/3\/workflow_steps\/a60e5f9f-3547-410a-b5bd-254f747f5fff",
-            "sourceStep": "\/api\/3\/workflow_steps\/513bdacf-7ac3-46c8-ac7a-d7512d83700f",
+            "targetStep": "\/api\/3\/workflow_steps\/b8ad6c76-96fc-4ccb-93ae-83caf52a807b",
+            "sourceStep": "\/api\/3\/workflow_steps\/4a3b2798-ea48-44c4-b4de-5606dcecaeac",
             "label": null,
             "isExecuted": false,
-            "uuid": "f5b9baed-ea7e-41df-8d72-7014b2d07692"
+            "uuid": "bd8131aa-ebb5-46b5-815e-c93e8a4855ce"
         }
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-    "uuid": "2e390867-c054-402c-8a5f-df81fd76e2e3",
+    "uuid": "5d689b69-d4a1-49f8-b0e3-d92993f77218",
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Nozomi",
-        "KEV",
+        "PostCreate",
         "Alert",
-        "PostCreate"
+        "KEV",
+        "Nozomi"
     ]
 }

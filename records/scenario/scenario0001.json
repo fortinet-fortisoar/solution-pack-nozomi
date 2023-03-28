@@ -1,0 +1,28 @@
+[
+    {
+        "@type": "Scenario",
+        "configuration": null,
+        "title": "Nozomi Scenario",
+        "description": "Nozomi Scenario",
+        "steps": {
+            "Steps": [
+                {
+                    "name": "Alert Creation Scenario",
+                    "type": "executePlaybook",
+                    "playbookIRI": "\/api\/3\/workflows\/f9bdb309-cc12-461f-9613-0d9d08f11406",
+                    "preCreateMessage": "Creating Alert and Asset demo record for Stuxnet Alert",
+                    "postCreateMessage": "",
+                    "waitTimeforNextStep": "0"
+                }
+            ]
+        },
+        "createdAlertsID": null,
+        "uuid": "7a5a0534-6427-4f77-9f5a-52c7163091f3",
+        "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
+        "createDate": 1679998077.728555,
+        "modifyUser": "\/api\/3\/appliances\/57545210-2adc-472b-a24f-2df6ee8dfe63",
+        "modifyDate": 1680016103.297215,
+        "id": 7,
+        "recordTags": []
+    }
+]
