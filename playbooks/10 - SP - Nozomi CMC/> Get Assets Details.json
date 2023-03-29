@@ -4,7 +4,7 @@
     "name": "> Get Assets Details",
     "aliasName": null,
     "tag": null,
-    "description": "This Playbook will fetch assets based on IP address.",
+    "description": "Playbook fetches assets based on Alert's Source and Destination MAC Address.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -17,27 +17,6 @@
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/628f0b6f-bfaa-4d3c-970b-2fb8c4f37f66",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Summary For Assets",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">KEV Alert<\/span> as per CVEs fetched from Nozomi for this Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<th>KEV Alert<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n{% set data = item.kEVAlerts | json_query(\"[?contains(recordTags, '\"+ics.iCSCERTID+\"')]\")%}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n{% if data | length > 0 %}\n <td><a href=\"\/modules\/k_e_v_alerts\/{{data[0]['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{data[0]['title']}}<\/a><\/td>\n{% else %}\n<td align=\"center\">-<\/td>\n{% endif %}\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "format_richtext",
-                "operationTitle": "Utils: Format as RichText (Markdown)",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "135",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "0c7ed7a0-e4d9-4b15-b998-6de82b33e26b"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Get Destination Indicator By IP",
@@ -70,7 +49,7 @@
                         "id"
                     ]
                 },
-                "module": "indicators?$limit=10000",
+                "module": "indicators?$limit=5000",
                 "do_until": {
                     "delay": 3,
                     "retries": 2,
@@ -146,35 +125,6 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Add Comment On Asset",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "assets": "{{vars.assetIRI}}",
-                    "people": [],
-                    "content": "<p>{{vars.steps.Summary_For_Assets.data['formatted_string']}}<\/p>",
-                    "__replace": "",
-                    "isImportant": false,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "165",
-            "left": "135",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "300480bb-9659-4d3c-a1d0-9df6292a83df"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Is Destination Asset Found",
             "description": null,
             "arguments": {
@@ -205,6 +155,7 @@
             "name": "Add Comment On Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "message": {
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
@@ -312,8 +263,9 @@
             "name": "Summary For Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "params": {
-                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per Affected Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
+                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per affected Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% if item.iCSAdvisories | length >  0 %}\n{% for ics in item.iCSAdvisories %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n{% else %}\n<tr><td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td align=\"center\">-<\/td><\/tr>\n{% endif %}\n{% endfor %}\n<\/tbody>\n<\/table>"
                 },
                 "version": "3.2.3",
                 "connector": "cyops_utilities",
@@ -360,7 +312,7 @@
                         "id"
                     ]
                 },
-                "module": "indicators?$limit=10000",
+                "module": "indicators?$limit=5000",
                 "do_until": {
                     "delay": 3,
                     "retries": 2,
@@ -440,15 +392,6 @@
             "label": null,
             "isExecuted": false,
             "uuid": "2c1e224b-e3a2-458c-95d4-268c5dccd02e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Summary -> Add Comment On Asset",
-            "targetStep": "\/api\/3\/workflow_steps\/300480bb-9659-4d3c-a1d0-9df6292a83df",
-            "sourceStep": "\/api\/3\/workflow_steps\/0c7ed7a0-e4d9-4b15-b998-6de82b33e26b",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "1ecfe82d-a092-4353-92ff-19b70fe7d363"
         },
         {
             "@type": "WorkflowRoute",

@@ -4,7 +4,7 @@
     "name": "On Asset Creation",
     "aliasName": null,
     "tag": null,
-    "description": "On Asset Creation (from Nozomi) link it to existing KEV Alert (if any of same vendor).",
+    "description": "On Asset Creation (from Nozomi) link it to existing KEV Alert (if any for same vendor).",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -127,7 +127,7 @@
                         "iCSAdvisories"
                     ]
                 },
-                "module": "c_v_es?$limit=20000&$relationships=true&$fsr_max_relation_count=20000",
+                "module": "c_v_es?$limit=5000&$relationships=true&$fsr_max_relation_count=5000",
                 "checkboxFields": true,
                 "step_variables": {
                     "cVEIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"@id\"][]') | unique }}",
@@ -147,12 +147,12 @@
             "name": "Add Comment",
             "description": null,
             "arguments": {
-                "when": "{{vars.kEVAlertIRI | length > 0}}",
+                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "assets": "{{vars.record[\"@id\"]}}",
                     "people": [],
-                    "content": "<p>KEV Alert for Asset vendor: <span style=\"background: #009d00; color: #fff;\" class=\"badge badge-pill badge-danger\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a rel=\"noopener\" target=\"_blank\" href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\">{{(item | fromIRI).title}} <\/a><br>{% endfor %}<\/p>",
+                    "content": "<p>KEV Alert for Asset vendor: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<p>{% if vars.kEVAlertIRI | length &gt; 0 %}<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{(item | fromIRI).title}} <\/a><br \/>{% endfor %}<\/p>\n<p>{% endif %}<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false

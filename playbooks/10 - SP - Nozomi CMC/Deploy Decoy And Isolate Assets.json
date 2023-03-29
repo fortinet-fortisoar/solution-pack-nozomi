@@ -4,7 +4,7 @@
     "name": "Deploy Decoy And Isolate Assets",
     "aliasName": null,
     "tag": null,
-    "description": "This PB will deploy decoy on assets and will isolates assets",
+    "description": "Playbook deploy FortiDeceptor decoy on assets, isolates assets in FortiEDR and raise ticket in Service Now ",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -112,7 +112,7 @@
             "description": null,
             "arguments": {
                 "name": "Fortinet FortiDeceptor",
-                "config": "895c762a-af67-4a80-9bad-92642b295172",
+                "config": "23ede628-a599-4d54-af3c-f44b2f262b07",
                 "params": {
                     "dns": "8.8.8.8",
                     "name": "{{vars.item.hostname}}",
@@ -129,7 +129,7 @@
                 },
                 "connector": "fortinet-fortideceptor",
                 "operation": "decoy_deploy",
-                "mock_result": "{\n  \"result\": [\n    {\n      \"data\": {\n        \"result\": {\n          \"instance_id\": \"3053551759739313504\",\n          \"instance_name\": \"fsr-prod-win10\"\n        },\n        \"status\": {\n          \"return_code\": 1\n        }\n      },\n      \"status\": \"Success\",\n      \"message\": \"\",\n      \"operation\": null\n    },\n    {\n      \"data\": {\n        \"result\": {\n          \"instance_id\": \"3053551760004480585\",\n          \"instance_name\": \"FSR-PROD-WIN10\"\n        },\n        \"status\": {\n          \"return_code\": 1\n        }\n      },\n      \"status\": \"Success\",\n      \"message\": \"\",\n      \"operation\": null\n    }\n  ],\n  \"execution_time\": \"572 ms\",\n  \"status\": \"finished\"\n}",
+                "mock_result": "{\n  \"result\": [\n    {\n      \"data\": {\n        \"result\": {\n          \"instance_id\": \"3053551760004480585\",\n          \"instance_name\": \"FSR-PROD-WIN10\"\n        },\n        \"status\": {\n          \"return_code\": 1\n        }\n      },\n      \"status\": \"Success\",\n      \"message\": \"\",\n      \"operation\": null\n    }\n  ],\n  \"execution_time\": \"572 ms\",\n  \"status\": \"finished\"\n}",
                 "operationTitle": "Deploy Decoy",
                 "pickFromTenant": false,
                 "step_variables": {
@@ -242,7 +242,7 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "alerts": "{{vars.input.records[0]['@id']}}",
                     "people": [],
-                    "content": "<p>Deployed FortiDeceptor Decoy:<\/p>\n<p>{% for item in vars.commentResult %}<\/p>\n<ul>\n<li><a href=\"\/modules\/assets\/{{item.iri.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\"> {{(item.iri | fromIRI).hostname}}<\/a> - {{item.instance_id}} - {{item.instance_name}}<\/li>\n<\/ul>\n<p>{% endfor %}<\/p>",
+                    "content": "<p>{{vars.steps.Summary_For_Asset.data['formatted_string']}}<\/p>",
                     "__replace": "",
                     "isImportant": true,
                     "peopleUpdated": false
@@ -256,7 +256,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "580",
+            "top": "160",
             "left": "1020",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
@@ -306,7 +306,7 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "alerts": "{{vars.input.records[0]['@id']}}",
                     "people": [],
-                    "content": "<p>Isolated Following Assets and Raised ServiceNow Ticket : <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.steps.Raise_ServiceNow_Ticket.data.result.number}}<\/span><\/p>\n<p>{% for asset in vars.assetList %}<\/p>\n<p><a href=\"\/modules\/assets\/{{asset.uuid}}\" target=\"_blank\" rel=\"noopener\">{{asset.hostname}}<\/a><\/p>\n<p>{% endfor %}<\/p>",
+                    "content": "<p>Isolated Following Assets and Raised ServiceNow Ticket : <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.steps.Raise_ServiceNow_Ticket.data.result.number}}<\/span><\/p>\n<p>{% for asset in vars.assetList %}<\/p>\n<p><a href=\"\/modules\/assets\/{{asset.uuid}}\" target=\"_blank\" rel=\"noopener\">{{loop.index}}. {{asset.hostname}}<\/a><\/p>\n<p>{% endfor %}<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false
@@ -357,9 +357,39 @@
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "38cb7c01-11bc-494d-9d47-4f83efda58b6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Summary For Asset",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "value": "<p>Deployed FortiDeceptor Decoy:<\/p>\n\n<table>\n<tbody>\n<tr>\n<td>Asset<\/td>\n<td>Decoy ID<\/td>\n<td>Decoy Name<\/td>\n<\/tr>\n<p>{% for item in vars.commentResult %}<\/p>\n<tr>\n<td><a href=\"\/modules\/assets\/{{item.iri.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\"> {{(item.iri | fromIRI).hostname}}<\/a><\/td>\n<td>{{item.instance_id}}<\/td>\n<td>{{item.instance_name}}<\/td>\n<\/tr>\n<p>{% endfor %}<\/p>\n<\/tbody>\n<\/table>\n"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "40",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "86930f8a-7a7c-4761-bc7a-f6f545163eb7"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Asset Comment On Alert -> Summary For Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/86930f8a-7a7c-4761-bc7a-f6f545163eb7",
+            "sourceStep": "\/api\/3\/workflow_steps\/a1f82a89-73d2-4bfe-9c73-cbd9c64ca344",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "01570e98-2968-48ee-8673-cbd5724cdf02"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Get Assets -> Deploy Decoy",
@@ -380,12 +410,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Add Asset Comment On Alert -> Add Decoy Comment On Alert",
+            "name": "Summary For Asset -> Add Decoy Comment On Alert",
             "targetStep": "\/api\/3\/workflow_steps\/26883260-9707-42a0-a3f4-3792950b1ff9",
-            "sourceStep": "\/api\/3\/workflow_steps\/a1f82a89-73d2-4bfe-9c73-cbd9c64ca344",
+            "sourceStep": "\/api\/3\/workflow_steps\/86930f8a-7a7c-4761-bc7a-f6f545163eb7",
             "label": null,
             "isExecuted": false,
-            "uuid": "5fad7624-ab24-43d1-8215-153425a035f6"
+            "uuid": "5c398175-c6dd-4a38-833c-c84fb534185c"
         },
         {
             "@type": "WorkflowRoute",
@@ -458,8 +488,11 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
+        "ServiceNow",
         "ManualTrigger",
         "Alerts",
-        "Assets"
+        "Assets",
+        "FortiEDR",
+        "FortiDECEPTOR"
     ]
 }

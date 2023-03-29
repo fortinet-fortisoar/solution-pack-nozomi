@@ -4,7 +4,7 @@
     "name": "Get Alert Details",
     "aliasName": null,
     "tag": null,
-    "description": "This Playbook will get Assets, get Appliance Details.",
+    "description": "Playbook execute post alert creation(from Nozomi) and get Appliance Details, Assets, Node, Links and CVEs",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -30,8 +30,8 @@
                 "workflowReference": "\/api\/3\/workflows\/1af85ef8-ecfb-49e5-bdf7-7ce2cec5d9e0"
             },
             "status": null,
-            "top": "30",
-            "left": "475",
+            "top": "180",
+            "left": "520",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "32d97e4c-ec60-4ae6-b44d-27302b07cc43"
@@ -62,12 +62,13 @@
             "name": "Add Appliance Details In Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.steps.Get_Appliance_Detail | length > 0}}",
                 "resource": {
                     "__link": {
                         "comments": "{{vars.steps.Get_Appliance_Detail['@id']}}"
                     }
                 },
-                "_showJson": true,
+                "_showJson": false,
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
@@ -138,8 +139,8 @@
                 "workflowReference": "\/api\/3\/workflows\/4d883603-fd3b-4372-a737-94e5dfa9d878"
             },
             "status": null,
-            "top": "165",
-            "left": "475",
+            "top": "300",
+            "left": "520",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d"
@@ -173,8 +174,8 @@
                 "workflowReference": "\/api\/3\/workflows\/9429e23a-2b6d-4a62-b1f3-49e1896f2347"
             },
             "status": null,
-            "top": "570",
-            "left": "125",
+            "top": "40",
+            "left": "520",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "30485bc3-510b-4615-ba34-63eb72b39e47"
@@ -194,8 +195,8 @@
                 "workflowReference": "\/api\/3\/workflows\/e3203a54-f966-4e96-abeb-85341e6e77ad"
             },
             "status": null,
-            "top": "300",
-            "left": "475",
+            "top": "440",
+            "left": "520",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "c8f15c48-ee9a-4a78-b60d-4feb1378259a"
@@ -204,12 +205,21 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Get Nodes -> Get Links",
-            "targetStep": "\/api\/3\/workflow_steps\/c8f15c48-ee9a-4a78-b60d-4feb1378259a",
-            "sourceStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
+            "name": "Add Appliance Details In Alert -> Get Assets Details",
+            "targetStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
+            "sourceStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
             "label": null,
             "isExecuted": false,
-            "uuid": "36420bef-f581-477e-b5f7-886b775e742e"
+            "uuid": "08f64b87-0692-408d-b835-4396d7a03670"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Assets Details -> Get Node CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
+            "sourceStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "3f2099c2-0880-4da8-9a78-ab673cad8451"
         },
         {
             "@type": "WorkflowRoute",
@@ -222,30 +232,21 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Assets Details -> Get Node CVEs",
-            "targetStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
-            "sourceStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
+            "name": "Get Nodes -> Get Links",
+            "targetStep": "\/api\/3\/workflow_steps\/c8f15c48-ee9a-4a78-b60d-4feb1378259a",
+            "sourceStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
             "label": null,
             "isExecuted": false,
-            "uuid": "73c391ff-84d4-4693-917b-cf85d93a8a7b"
+            "uuid": "aeb9a706-6162-4796-a16a-e7a078e21b0a"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Add Appliance Detail On Alert -> Get Assets",
-            "targetStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
-            "sourceStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
+            "name": "Get Appliance Detail -> Add Appliance Details In Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
+            "sourceStep": "\/api\/3\/workflow_steps\/936dcdb9-f8c1-4306-9a29-d8327f93c5f4",
             "label": null,
             "isExecuted": false,
-            "uuid": "95b794bb-be09-4ffe-b56f-339f157aac6b"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Node CVEs -> Get Nodes",
-            "targetStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
-            "sourceStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "e402f51b-b2c7-436b-a9fb-be853b49e970"
+            "uuid": "c64ed3ea-da49-4ae3-a648-307ae8d475ed"
         },
         {
             "@type": "WorkflowRoute",
@@ -258,12 +259,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Appliance Detail -> Add Appliance Detail On Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
-            "sourceStep": "\/api\/3\/workflow_steps\/936dcdb9-f8c1-4306-9a29-d8327f93c5f4",
+            "name": "Get Node CVEs -> Get Nodes",
+            "targetStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
+            "sourceStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
             "label": null,
             "isExecuted": false,
-            "uuid": "f970ad82-922c-4ab0-8983-759789520963"
+            "uuid": "f26ac381-969f-48bb-87e7-e79e221939b4"
         }
     ],
     "groups": [],
@@ -275,6 +276,8 @@
     "recordTags": [
         "PostCreate",
         "Alert",
+        "KEV",
+        "CVE",
         "Appliance",
         "Nozomi",
         "Nodes",

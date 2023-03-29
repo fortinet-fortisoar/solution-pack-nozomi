@@ -1,10 +1,10 @@
 {
     "@type": "Workflow",
     "triggerLimit": null,
-    "name": "Alert Creation Scenario",
+    "name": "Scenario - Create Nozomi Alert",
     "aliasName": null,
     "tag": null,
-    "description": "Playbook generated sample CVEs, ICS Advisory, KEV Alert and Alert to understand Nozomi Use Case",
+    "description": "Playbook generated sample CVEs, ICS Advisory, KEV Alert and Alert to understand Nozomi Use Case.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -13,35 +13,8 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/b9930846-6b76-4976-b0ef-88a81106b5d7",
+    "triggerStep": "\/api\/3\/workflow_steps\/9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Start",
-            "description": null,
-            "arguments": {
-                "route": "8ab65a3a-e218-409c-a194-25b7af8f73f3",
-                "resources": [
-                    "alerts"
-                ],
-                "inputVariables": [],
-                "step_variables": {
-                    "input": {
-                        "params": [],
-                        "records": "{{vars.input.records}}"
-                    }
-                },
-                "executeButtonText": "Execute",
-                "noRecordExecution": true,
-                "singleRecordExecution": false
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
-            "group": null,
-            "uuid": "b9930846-6b76-4976-b0ef-88a81106b5d7"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Update CVEs With ICS Advisory",
@@ -345,6 +318,24 @@
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "b6b517b5-4fac-4bc0-9ad5-aff828a27d2c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d"
         }
     ],
     "routes": [
@@ -368,6 +359,15 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Create KEV Alerts -> Create Alerts",
+            "targetStep": "\/api\/3\/workflow_steps\/46ae2af2-60cf-4786-b130-ea2c320ee0b3",
+            "sourceStep": "\/api\/3\/workflow_steps\/335ddb91-9138-4315-bc5f-777f81bad82b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "597c59d9-a102-4c94-a8d3-f299e608957e"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Create Alerts -> Output",
             "targetStep": "\/api\/3\/workflow_steps\/03551ca8-7d51-405d-88b7-2451ac00f25a",
             "sourceStep": "\/api\/3\/workflow_steps\/46ae2af2-60cf-4786-b130-ea2c320ee0b3",
@@ -377,21 +377,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Create CVEs Record",
-            "targetStep": "\/api\/3\/workflow_steps\/46b5203c-0d2c-4488-9f92-ee8464fb82be",
-            "sourceStep": "\/api\/3\/workflow_steps\/708ae4ac-c69b-43c5-b8a0-5f1527d2c9c4",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "7b65aae1-c5ce-4a60-8182-abc0fb09755d"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Start -> Get JSON Data",
             "targetStep": "\/api\/3\/workflow_steps\/e8de1879-e154-4e1f-96bc-c20dd2eb24fb",
-            "sourceStep": "\/api\/3\/workflow_steps\/b9930846-6b76-4976-b0ef-88a81106b5d7",
+            "sourceStep": "\/api\/3\/workflow_steps\/9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d",
             "label": null,
             "isExecuted": false,
-            "uuid": "95dadfaf-806f-4c48-852a-20841163de45"
+            "uuid": "98f0a6e0-de2c-4d3a-b1aa-f9c3c650cd9a"
         },
         {
             "@type": "WorkflowRoute",
@@ -404,12 +395,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Create KEV Alerts -> Create Alerts",
-            "targetStep": "\/api\/3\/workflow_steps\/46ae2af2-60cf-4786-b130-ea2c320ee0b3",
-            "sourceStep": "\/api\/3\/workflow_steps\/335ddb91-9138-4315-bc5f-777f81bad82b",
+            "name": "Configuration -> Create CVEs Record",
+            "targetStep": "\/api\/3\/workflow_steps\/46b5203c-0d2c-4488-9f92-ee8464fb82be",
+            "sourceStep": "\/api\/3\/workflow_steps\/708ae4ac-c69b-43c5-b8a0-5f1527d2c9c4",
             "label": null,
             "isExecuted": false,
-            "uuid": "c090bf59-003b-45f4-a14e-fbbc562d7ae3"
+            "uuid": "e19cd76e-28c4-443c-9fd8-a93ddad917ec"
         },
         {
             "@type": "WorkflowRoute",

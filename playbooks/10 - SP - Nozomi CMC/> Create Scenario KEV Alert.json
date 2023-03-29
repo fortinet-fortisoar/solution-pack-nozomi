@@ -4,7 +4,7 @@
     "name": "> Create Scenario KEV Alert",
     "aliasName": null,
     "tag": null,
-    "description": null,
+    "description": "Playbook scenario creates KEV Alert.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -51,7 +51,7 @@
                         }
                     ]
                 },
-                "module": "c_v_es?$limit=30",
+                "module": "c_v_es?$limit=5000",
                 "for_each": {
                     "item": "{{vars.kevAlert.cVEList}}",
                     "parallel": false,
@@ -216,5 +216,11 @@
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,
-    "recordTags": []
+    "recordTags": [
+        "Alert",
+        "Referenced",
+        "Scenario",
+        "KEV",
+        "Nozomi"
+    ]
 }

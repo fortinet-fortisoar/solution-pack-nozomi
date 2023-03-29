@@ -33,7 +33,7 @@
     ],
     "prerequisite": null,
     "publisher": "Fortinet",
-    "description": null,
+    "description": "Nozomi Solution Pack helps in getting all the involved Assets, Nodes, Links and CVEs from Nozomi for an Alert.",
     "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.1.0/docs/README.md",
     "category": [
         "Vulnerability and Risk Management",
@@ -45,7 +45,7 @@
     "supportInfo": null,
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-28T15:12:53+00:00",
+    "date": "2023-03-29T09:01:13+00:00",
     "contents": {
         "playbooks": [
             {
@@ -87,6 +87,11 @@
             }
         ],
         "recordSets": [
+            {
+                "name": "Attachments",
+                "apiName": "attachments",
+                "count": 1
+            },
             {
                 "name": "Scenario",
                 "apiName": "scenario",

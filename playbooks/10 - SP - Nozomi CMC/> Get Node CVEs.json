@@ -4,7 +4,7 @@
     "name": "> Get Node CVEs",
     "aliasName": null,
     "tag": null,
-    "description": "This Playbook will get CVE from Nozomi by Appliance Id and Asset Vendor",
+    "description": "Playbook fetches CVEs from Nozomi by Alert's assets vendor.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -22,6 +22,7 @@
             "name": "Get ICS Advisory By CVE Id",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVEList | length > 0}}",
                 "query": {
                     "sort": [],
                     "limit": 30,
@@ -78,8 +79,9 @@
             "name": "Summary For Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "params": {
-                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per vendor found in affected Assets:<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
+                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> as per vendor found in affected Assets:<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% if item.iCSAdvisories | length > 0 %}\n{% for ics in item.iCSAdvisories %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n{% else %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td align=\"center\">-<\/td>\n <\/tr>\n{% endif %}\n{% endfor %}\n<\/tbody>\n<\/table>\n"
                 },
                 "version": "3.2.3",
                 "connector": "cyops_utilities",
@@ -99,6 +101,7 @@
             "name": "Correlate Alert With CVEs and ICS Advisory",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "message": {
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
@@ -198,7 +201,7 @@
                         "assets"
                     ]
                 },
-                "module": "alerts?$limit=30&$relationships=true&$fsr_max_relation_count=100",
+                "module": "alerts?$limit=5000&$relationships=true&$fsr_max_relation_count=100",
                 "checkboxFields": true,
                 "step_variables": {
                     "assetVendorList": "{{vars.steps.Get_Correlated_Assets[0].assets | json_query('[*][\"vendor\"][]') }}"

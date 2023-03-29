@@ -4,7 +4,7 @@
     "name": "> Get Links",
     "aliasName": null,
     "tag": null,
-    "description": "This PB will get links on the basis of Source and Destination IP",
+    "description": "Playbook get links from Nozomi on the basis of Alert's Source IP and Destination IP.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -22,8 +22,9 @@
             "name": "Summary For Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.linkList | flatten | length > 0}}",
                 "params": {
-                    "value": "<p>Recent network activity fetched from Nozomi as an Event for Alert's Source IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['sourceIp']}}<\/span> and Destination IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['destinationIp']}}<\/span><\/p><hr>\n<table>\n<tbody>\n<tr>\n<th>Communication From<\/th>\n<th>Communication To<\/th>\n<th>Event<\/th>\n<\/tr>\n{% for data in vars.eventResult %}\n<tr>\n<td >{{data.from}}<\/td>\n<td >{{data.to}}<\/td>\n<td><a href=\"\/modules\/events\/{{data.eventUuid}}\" target=\"_blank\" rel=\"noopener\">Click Here<\/a><\/td>\n<\/tr>\n{% endfor %}\n<\/tbody>\n<\/table>\n\n"
+                    "value": "<p>Recent network activity fetched from Nozomi as an Event for Alert's Source IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['sourceIp']}}<\/span> and Destination IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['destinationIp']}}<\/span><\/p><hr>\n<table>\n<tbody>\n<tr>\n<th>Communication From<\/th>\n<th>Communication To<\/th>\n<th>Event ID<\/th>\n<\/tr>\n{% for data in vars.eventResult %}\n<tr>\n<td >{{data.from}}<\/td>\n<td >{{data.to}}<\/td>\n<td align=\"center\"><a href=\"\/modules\/events\/{{data.eventUuid}}\" target=\"_blank\" rel=\"noopener\">{{data.id}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n<\/tbody>\n<\/table>\n\n"
                 },
                 "version": "3.2.3",
                 "connector": "cyops_utilities",
@@ -115,6 +116,7 @@
             "name": "Create Event",
             "description": null,
             "arguments": {
+                "when": "{{vars.linkList | flatten | length > 0}}",
                 "for_each": {
                     "item": "{{vars.linkList | flatten}}",
                     "__bulk": true,
@@ -138,7 +140,7 @@
                     "recordTags": "Overwrite"
                 },
                 "step_variables": {
-                    "eventResult": "{% set result = [] %}{% for data in vars.linkList | flatten %}\n{% set output = vars.steps.Create_Event | json_query(\"[?contains(recordTags, '\"+data.to+\"') && contains(recordTags, '\"+data.from+\"')]\") %}\n{% set _ = result.append({\"from\":data.from,\"to\":data.to,\"eventUuid\":output[0][\"uuid\"]}) %}{% endfor %}{{result}}"
+                    "eventResult": "{% set result = [] %}{% for data in vars.linkList | flatten %}\n{% set output = vars.steps.Create_Event | json_query(\"[?contains(recordTags, '\"+data.to+\"') && contains(recordTags, '\"+data.from+\"')]\") %}\n{% set _ = result.append({\"id\":output[0][\"id\"],\"from\":data.from,\"to\":data.to,\"eventUuid\":output[0][\"uuid\"]}) %}{% endfor %}{{result}}"
                 }
             },
             "status": null,
@@ -169,6 +171,7 @@
             "name": "Add Comment On Alert",
             "description": null,
             "arguments": {
+                "when": "{{vars.linkList | flatten | length > 0}}",
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "alerts": "{{vars.input.params.alertData['@id']}}",
@@ -259,6 +262,7 @@
     "recordTags": [
         "Alert",
         "Referenced",
-        "Nozomi"
+        "Nozomi",
+        "Events"
     ]
 }

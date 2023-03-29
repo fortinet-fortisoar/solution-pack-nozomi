@@ -4,7 +4,7 @@
     "name": "> Create Asset Record",
     "aliasName": null,
     "tag": null,
-    "description": "This PB will create Asset Record and fetch CVEs from Nozomi and correlate Asset with CVEs, ICS Advisory and KEV Alert",
+    "description": "Playbook create Asset Record and fetch CVEs from Nozomi by Asset ID.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -24,6 +24,7 @@
             "name": "Get Correlated Record Of CVEs",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "query": {
                     "sort": [],
                     "limit": 30,
@@ -43,7 +44,7 @@
                         "iCSAdvisories"
                     ]
                 },
-                "module": "c_v_es?$limit=30&$relationships=true&$fsr_max_relation_count=100",
+                "module": "c_v_es?$limit=5000&$relationships=true&$fsr_max_relation_count=5000",
                 "for_each": {
                     "item": "{{vars.cVE}}",
                     "parallel": false,
@@ -57,36 +58,11 @@
                 }
             },
             "status": null,
-            "top": "840",
-            "left": "825",
+            "top": "975",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "cdcc4ede-4938-43ef-9921-a79cf54a9109"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Alert With CVEs And ICS Advisory",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "__link": {
-                        "cVEs": "{{vars.cVE | json_query('[*][\"@id\"][]') }}",
-                        "iCSAdvisories": "{{vars.iCSAdvisory | json_query('[*][\"@id\"][]')}}"
-                    }
-                },
-                "operation": "Append",
-                "collection": "{{vars.input.params.alertIRI}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/alerts",
-                "fieldOperation": [],
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "88a28ed1-1668-46d3-b2c0-b37be5d92c5b"
         },
         {
             "@type": "WorkflowStep",
@@ -98,39 +74,10 @@
             },
             "status": null,
             "top": "165",
-            "left": "825",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "29af7ab4-b6c5-4a34-9e3a-d28ff9a82dc7"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Add Comment On Asset",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "assets": "{{vars.assetIRI}}",
-                    "people": [],
-                    "content": "<p>{{vars.steps.Summary_For_Assets.data['formatted_string']}}<\/p>",
-                    "__replace": "",
-                    "isImportant": false,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "b2f3b691-79e9-4deb-b1bd-cec247b2d90a"
         },
         {
             "@type": "WorkflowStep",
@@ -148,7 +95,7 @@
             },
             "status": null,
             "top": "570",
-            "left": "825",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "c3facca9-42ac-4882-9dec-6d657507a55d"
@@ -163,7 +110,7 @@
             },
             "status": null,
             "top": "300",
-            "left": "825",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "5a6a9c15-06e0-4d4b-89be-3c7b282336a4"
@@ -181,7 +128,7 @@
             },
             "status": null,
             "top": "30",
-            "left": "825",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
             "uuid": "4d7be579-9691-4916-b61d-98944ffcd9a5"
@@ -195,8 +142,8 @@
                 "asset": "{{vars.steps.Create_Assets}}"
             },
             "status": null,
-            "top": "1245",
-            "left": "825",
+            "top": "1380",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "587b309d-79b6-4b04-9bbf-9934fca4574e"
@@ -221,58 +168,18 @@
                 "workflowReference": "\/api\/3\/workflows\/6a63346e-e258-4338-8bab-59a1106b1511"
             },
             "status": null,
-            "top": "705",
-            "left": "825",
+            "top": "840",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "a1ed82ab-1abf-4068-ba7b-453efe37caa9"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get Correlated Record Of CVEs d",
+            "name": "Update Asset With CVEs ICS Advisory And KEV Alert",
             "description": null,
             "arguments": {
-                "query": {
-                    "sort": [],
-                    "limit": 30,
-                    "logic": "AND",
-                    "filters": [
-                        {
-                            "type": "primitive",
-                            "field": "uuid",
-                            "value": "{{vars.item.uuid}}",
-                            "operator": "eq",
-                            "_operator": "eq"
-                        }
-                    ],
-                    "__selectFields": [
-                        "cVEID"
-                    ]
-                },
-                "module": "c_v_es?$limit=30&$relationships=true&$fsr_max_relation_count=100",
-                "for_each": {
-                    "item": "{{vars.cVE}}",
-                    "parallel": false,
-                    "condition": ""
-                },
-                "checkboxFields": true,
-                "step_variables": {
-                    "kevAlert": "{{vars.steps.Get_Correlated_Record_Of_CVEs_d | flatten | json_query('[*][kEVAlerts][][]') | unique}}",
-                    "iCSAdvisory": "{{vars.steps.Get_Correlated_Record_Of_CVEs_d | flatten | json_query('[*][iCSAdvisories][][]') | unique}}"
-                }
-            },
-            "status": null,
-            "top": "30",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
-            "group": null,
-            "uuid": "e56b7965-d53d-49cf-857c-796a9e4b6d6a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Asset With CVEs ICS Advisory and KEV Alert",
-            "description": null,
-            "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "message": {
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
@@ -284,7 +191,6 @@
                 "resource": {
                     "__link": {
                         "cVEs": "{{vars.cVE | json_query('[*][\"@id\"][]')}}",
-                        "comments": "{{vars.steps.Get_Appliance_Detail['@id']}}",
                         "kEVAlerts": "{{vars.kevAlert | json_query('[*][\"@id\"][]') }}",
                         "iCSAdvisories": "{{vars.iCSAdvisory | json_query('[*][\"@id\"][]') }}"
                     }
@@ -299,8 +205,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1110",
-            "left": "825",
+            "top": "1245",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "20ea7210-fca9-4884-a10e-d3849b1a724d"
@@ -310,8 +216,9 @@
             "name": "Summary For Assets",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "params": {
-                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">KEV Alert<\/span> as per CVEs fetched from Nozomi for this Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<th>KEV Alert<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% for ics in item.iCSAdvisories %}\n{% set data = item.kEVAlerts | json_query(\"[?contains(recordTags, '\"+ics.iCSCERTID+\"')]\")%}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n{% if data | length > 0 %}\n <td><a href=\"\/modules\/k_e_v_alerts\/{{data[0]['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{data[0]['title']}}<\/a><\/td>\n{% else %}\n<td align=\"center\">-<\/td>\n{% endif %}\n<\/tr>\n{% endfor %}\n{% endfor %}\n<\/tbody>\n<\/table>"
+                    "value": "<p>Correlated following <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">CVEs<\/span> <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">ICS Advisory<\/span> and <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">KEV Alert<\/span> as per CVEs fetched from Nozomi for this Asset.<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th>CVEs<\/th>\n<th>ICS Advisory<\/th>\n<th>KEV Alert<\/th>\n<\/tr>\n{% for item in vars.cVE %}\n{% if item.iCSAdvisories | length > 0 %}\n{% for ics in item.iCSAdvisories %}\n{% set data = item.kEVAlerts | json_query(\"[?contains(recordTags, '\"+ics.iCSCERTID+\"')]\")%}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td><a href=\"\/modules\/i_c_s_advisories\/{{ics['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{ics.iCSCERTID}}<\/a><\/td>\n{% if data | length > 0 %}\n <td><a href=\"\/modules\/k_e_v_alerts\/{{data[0]['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{data[0]['title']}}<\/a><\/td>\n{% else %}\n<td align=\"center\">-<\/td>\n{% endif %}\n<\/tr>\n{% endfor %}\n{% else %}\n<tr>\n<td><a href=\"\/modules\/c_v_es\/{{item['uuid']}}\" target=\"_blank\" rel=\"noopener\">{{item.cVEID}}<\/a><\/td>\n<td align=\"center\">-<\/td>\n<td align=\"center\">-<\/td>\n<\/tr>\n{% endif %}\n{% endfor %}\n<\/tbody>\n<\/table>"
                 },
                 "version": "3.2.3",
                 "connector": "cyops_utilities",
@@ -320,8 +227,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "975",
-            "left": "825",
+            "top": "1110",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "b8d7b015-a0b0-4508-b9c5-08c018237944"
@@ -364,13 +271,48 @@
             },
             "status": null,
             "top": "435",
-            "left": "825",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "31bcac9c-4d17-4e7e-b2ac-cc9b305462fd"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment On Asset",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "__link": {
+                        "comments": "{{vars.steps.Get_Appliance_Detail['@id']}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.steps.Create_Assets['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/assets",
+                "fieldOperation": {
+                    "protocol": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "f8a4e95c-716f-4d43-a6f5-21ec570f8f04"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Appliance Detail -> Add Comment On Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/f8a4e95c-716f-4d43-a6f5-21ec570f8f04",
+            "sourceStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "03a76904-90fb-4e61-bd77-09fbe887c96e"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Configuration",
@@ -400,21 +342,21 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Add Comment On Asset -> Get CVEs By Asset Id",
+            "targetStep": "\/api\/3\/workflow_steps\/a1ed82ab-1abf-4068-ba7b-453efe37caa9",
+            "sourceStep": "\/api\/3\/workflow_steps\/f8a4e95c-716f-4d43-a6f5-21ec570f8f04",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "6025fd74-e194-42fc-a034-00b8a5954997"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get Correlated Record Of CVEs -> Summary For Assets",
             "targetStep": "\/api\/3\/workflow_steps\/b8d7b015-a0b0-4508-b9c5-08c018237944",
             "sourceStep": "\/api\/3\/workflow_steps\/cdcc4ede-4938-43ef-9921-a79cf54a9109",
             "label": null,
             "isExecuted": false,
             "uuid": "69ea5632-6965-4d69-bfbf-cdc49efbee62"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Appliance Detail -> Get CVEs By Asset Id",
-            "targetStep": "\/api\/3\/workflow_steps\/a1ed82ab-1abf-4068-ba7b-453efe37caa9",
-            "sourceStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "748b3929-1963-496a-9f5f-5ad3666f1c0a"
         },
         {
             "@type": "WorkflowRoute",

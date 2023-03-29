@@ -1,0 +1,20 @@
+[
+    {
+        "@type": "Attachment",
+        "name": "Nozomi - Sample Data",
+        "description": null,
+        "file": "\/api\/3\/files\/ed065a8c-aedc-4da3-b454-2ee6d5f5d507",
+        "type": null,
+        "uuid": "c8d00f43-7a6d-4f47-b028-714070483143",
+        "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
+        "createDate": 1680014927.622333,
+        "modifyUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
+        "modifyDate": 1680066365.499621,
+        "id": 3,
+        "recordTags": [
+            "OT IT",
+            "Nozomi"
+        ],
+        "assignee": ""
+    }
+]

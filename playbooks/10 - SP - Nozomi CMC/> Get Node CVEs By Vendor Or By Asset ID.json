@@ -4,7 +4,7 @@
     "name": "> Get Node CVEs By Vendor Or By Asset ID",
     "aliasName": null,
     "tag": null,
-    "description": "This Playbook will fetch CVEs in Nozomi by vendor or by asset id provided.",
+    "description": "Playbook fetches CVEs from Nozomi by vendor or by asset id.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -24,7 +24,7 @@
             "name": "Add Vendor Tag On CVEs",
             "description": null,
             "arguments": {
-                "when": "{{vars.steps.Remove_Special_Character.data['code_output'] is not none}}",
+                "when": "{{vars.cVEIdList | length > 0 and vars.steps.Remove_Special_Character.data['code_output'] is not none}}",
                 "for_each": {
                     "item": "{{vars.cVE}}",
                     "__bulk": true,
@@ -211,6 +211,7 @@
             "name": "Find CVEs Record",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVEIdList | length > 0}}",
                 "query": {
                     "sort": [],
                     "limit": 30,
@@ -229,7 +230,7 @@
                         "isInKEVCatalog"
                     ]
                 },
-                "module": "c_v_es?$limit=10000",
+                "module": "c_v_es?$limit=5000",
                 "checkboxFields": true,
                 "step_variables": {
                     "__dummy": "{{vars.cVE.extend(vars.steps.Find_CVEs_Record)}}",
@@ -267,6 +268,7 @@
             "name": "Remove Special Character",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVE | length > 0}}",
                 "config": "be5d6cca-503d-45c0-b58e-d470e6490443",
                 "params": {
                     "python_function": "import re\n\nvendor = {{vars.input}}.get('params').get('vendor')\ndef remove_special_characters(string):\n    return re.sub(r'[^\\w\\s]', '', string)\nprint(remove_special_characters(vendor))\n"
