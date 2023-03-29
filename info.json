@@ -1,10 +1,10 @@
 {
-    "name": "nozomi",
+    "name": "nozomiNetworksCentralManagementConsole",
     "version": "1.0.0",
     "fsrMinCompatibility": "7.2.0",
     "type": "solutionpack",
     "local": true,
-    "label": "Nozomi",
+    "label": "Nozomi Networks Central Management Console",
     "dependencies": [
         {
             "name": "sOARFramework",
@@ -33,7 +33,7 @@
     ],
     "prerequisite": null,
     "publisher": "Fortinet",
-    "description": "Nozomi Solution Pack helps in getting all the involved Assets, Nodes, Links and CVEs from Nozomi for an Alert.",
+    "description": "The Nozomi Central Management Console Solution Pack helps in retrieving all relevant Assets, Nodes, Links, and CVEs for an Alert from Nozomi. Solution Pack fetches CVEs from Nozomi CMC in accordance with Asset Vendor. Helps in Deploying Decoys, Isolate affected assets and raise Ticket in Service Now.",
     "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.1.0/docs/README.md",
     "category": [
         "Vulnerability and Risk Management",
@@ -45,21 +45,14 @@
     "supportInfo": null,
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-29T09:01:13+00:00",
+    "date": "2023-03-29T10:02:34+00:00",
     "contents": {
         "playbooks": [
             {
-                "name": "10 - SP - Nozomi CMC"
+                "name": "02 - Use Case - Nozomi CMC"
             }
         ],
-        "globalVariables": [
-            {
-                "id": 16,
-                "name": "Demo_mode",
-                "value": "true",
-                "default_value": "false"
-            }
-        ],
+        "globalVariables": [],
         "connectors": [
             {
                 "name": "Code Snippet",

@@ -14,7 +14,7 @@
         "iCSAdvisoryIRI"
     ],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/cc4e087b-ab8f-48a8-a1cc-3c83d660bc40",
     "steps": [

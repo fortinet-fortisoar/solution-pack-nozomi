@@ -2,7 +2,7 @@
     {
         "@type": "Scenario",
         "configuration": null,
-        "title": "Nozomi Scenario",
+        "title": "Nozomi Networks Central Management Console Scenario",
         "description": "This Scenario adds 10 CVEs, 5 ICS Advisory, 5 KEV Alert and \"Inactive protocol OFF\" Alert. These data can be used to understand Nozomi Use Case.",
         "steps": {
             "Steps": [
@@ -21,8 +21,8 @@
         "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
         "createDate": 1679998077.728555,
         "modifyUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
-        "modifyDate": 1680080406.675919,
-        "id": 7,
+        "modifyDate": 1680084129.443615,
+        "id": 10,
         "recordTags": [
             "Alert",
             "ICS - Advisory",

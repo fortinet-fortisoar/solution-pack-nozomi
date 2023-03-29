@@ -4,52 +4,17 @@
     "name": "Deploy Decoy And Isolate Assets",
     "aliasName": null,
     "tag": null,
-    "description": "Playbook deploy FortiDeceptor decoy on assets, isolates assets in FortiEDR and raise ticket in Service Now ",
+    "description": "This Playbook will deploy FortiDeceptor decoy on assets, isolates assets and Service Now Ticket",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/f928f2fe-0789-455a-b955-4478684d9f96",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Start",
-            "description": null,
-            "arguments": {
-                "route": "c6c6638d-e70b-41ef-9fac-182de7ced7b6",
-                "resources": [
-                    "alerts"
-                ],
-                "inputVariables": [],
-                "step_variables": {
-                    "input": {
-                        "params": [],
-                        "records": "{{vars.input.records}}"
-                    }
-                },
-                "displayConditions": {
-                    "alerts": {
-                        "sort": [],
-                        "limit": 30,
-                        "logic": "AND",
-                        "filters": []
-                    }
-                },
-                "executeButtonText": "Execute",
-                "noRecordExecution": false,
-                "singleRecordExecution": true
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
-            "group": null,
-            "uuid": "f928f2fe-0789-455a-b955-4478684d9f96"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Set UUID With Decoy Id",
@@ -63,6 +28,141 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "1021bb13-ab0d-4673-98d4-e22c94efd395"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Raise ServiceNow Ticket",
+            "description": null,
+            "arguments": {
+                "name": "ServiceNow",
+                "config": "0323f23c-3069-4e5b-b350-213e510d6bcc",
+                "params": {
+                    "state": "",
+                    "impact": "1",
+                    "urgency": "1",
+                    "category": "",
+                    "location": "",
+                    "severity": "1",
+                    "caller_id": "{{vars.loggedInUserName}}",
+                    "work_notes": "",
+                    "assigned_to": "{{vars.loggedInUserName}}",
+                    "description": "",
+                    "other_fields": "",
+                    "assignment_group": "",
+                    "short_description": "The asset has been quarantined; please take the appropriate action."
+                },
+                "version": "3.2.0",
+                "connector": "servicenow",
+                "operation": "create_incident",
+                "mock_result": "{\n  \"data\": {\n    \"result\": {\n      \"rfc\": \"\",\n      \"order\": \"\",\n      \"state\": \"2\",\n      \"active\": \"true\",\n      \"impact\": \"1\",\n      \"notify\": \"1\",\n      \"number\": \"INC0010001\",\n      \"parent\": \"\",\n      \"skills\": \"\",\n      \"sys_id\": \"\",\n      \"cmdb_ci\": \"\",\n      \"company\": \"\",\n      \"sla_due\": \"\",\n      \"urgency\": \"1\",\n      \"approval\": \"not requested\",\n      \"category\": \"inquiry\",\n      \"comments\": \"\",\n      \"contract\": \"\",\n      \"due_date\": \"\",\n      \"location\": \"\",\n      \"made_sla\": \"true\",\n      \"priority\": \"1\",\n      \"severity\": \"1\",\n      \"sys_tags\": \"\",\n      \"work_end\": \"\",\n      \"caller_id\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"caused_by\": \"\",\n      \"closed_at\": \"\",\n      \"closed_by\": \"\",\n      \"follow_up\": \"\",\n      \"knowledge\": \"false\",\n      \"opened_at\": \"\",\n      \"opened_by\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"close_code\": \"\",\n      \"escalation\": \"0\",\n      \"group_list\": \"\",\n      \"problem_id\": \"\",\n      \"sys_domain\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"user_input\": \"\",\n      \"watch_list\": \"\",\n      \"work_notes\": \"\",\n      \"work_start\": \"\",\n      \"assigned_to\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"close_notes\": \"\",\n      \"description\": \"\",\n      \"hold_reason\": \"\",\n      \"reopened_by\": \"\",\n      \"resolved_at\": \"\",\n      \"resolved_by\": \"\",\n      \"subcategory\": \"\",\n      \"time_worked\": \"\",\n      \"upon_reject\": \"cancel\",\n      \"activity_due\": \"\",\n      \"approval_set\": \"\",\n      \"business_stc\": \"\",\n      \"calendar_stc\": \"\",\n      \"contact_type\": \"\",\n      \"reopen_count\": \"0\",\n      \"route_reason\": \"\",\n      \"delivery_plan\": \"\",\n      \"delivery_task\": \"\",\n      \"reopened_time\": \"\",\n      \"sys_mod_count\": \"0\",\n      \"upon_approval\": \"proceed\",\n      \"correlation_id\": \"\",\n      \"expected_start\": \"\",\n      \"incident_state\": \"2\",\n      \"sys_class_name\": \"incident\",\n      \"sys_created_by\": \"admin\",\n      \"sys_created_on\": \"2023-01-04 13:27:20\",\n      \"sys_updated_by\": \"admin\",\n      \"sys_updated_on\": \"2023-01-04 13:27:20\",\n      \"child_incidents\": \"0\",\n      \"parent_incident\": \"\",\n      \"sys_domain_path\": \"\/\",\n      \"work_notes_list\": \"\",\n      \"approval_history\": \"\",\n      \"assignment_group\": \"\",\n      \"business_service\": \"\",\n      \"service_offering\": \"\",\n      \"business_duration\": \"\",\n      \"calendar_duration\": \"\",\n      \"short_description\": \"The asset has been quarantined; please take the appropriate action.\",\n      \"universal_request\": \"\",\n      \"reassignment_count\": \"0\",\n      \"correlation_display\": \"\",\n      \"task_effective_number\": \"INC0010001\",\n      \"comments_and_work_notes\": \"\",\n      \"additional_assignee_list\": \"\"\n    }\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null\n}",
+                "operationTitle": "Create Incident",
+                "pickFromTenant": false,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "440",
+            "left": "640",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "2338c874-8d7a-480c-b799-a983fbda44f1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Decoy Comment On Alert",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "alerts": "{{vars.input.records[0]['@id']}}",
+                    "people": [],
+                    "content": "<p>{{vars.steps.Summary_For_Asset.data['formatted_string']}}<\/p>",
+                    "__replace": "",
+                    "isImportant": true,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "160",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "26883260-9707-42a0-a3f4-3792950b1ff9"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment On Asset",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.commentResult}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "assets": "{{vars.item.iri}}",
+                    "people": [],
+                    "content": "<p>Deployed FortiDeceptor Decoy with Instance id: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.item.instance_id}}<\/span> and Instance Name: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.item.instance_name}}<\/span><\/p>",
+                    "__replace": "",
+                    "isImportant": true,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "protocol": "Overwrite",
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "40",
+            "left": "640",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "2ea85c65-f546-4d3c-a490-5a5c80bdada0"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Quarantine Asset In FortiEDR",
+            "description": null,
+            "arguments": {
+                "name": "Fortinet FortiEDR",
+                "config": "a6fdf914-7190-4c2f-bbb0-29469ad5d6a4",
+                "params": {
+                    "type": "Name",
+                    "devices": "{{vars.item.hostname}}",
+                    "organization": ""
+                },
+                "version": "1.3.1",
+                "for_each": {
+                    "item": "{{vars.assetList}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "connector": "fortinet-fortiedr",
+                "operation": "isolate_collector",
+                "mock_result": "{\n  \"data\": {\n    \"result\": \"Successfully executed isolate_collector\"\n  },\n  \"status\": \"Success\",\n  \"_status\": true,\n  \"message\": \"\",\n  \"operation\": null,\n  \"request_id\": null\n}",
+                "operationTitle": "Isolate Collector",
+                "pickFromTenant": false,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "160",
+            "left": "640",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "38cb7c01-11bc-494d-9d47-4f83efda58b6"
         },
         {
             "@type": "WorkflowStep",
@@ -108,6 +208,62 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get Assets",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "uuid",
+                            "value": "{{vars.input.records[0].uuid}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "assets"
+                    ]
+                },
+                "module": "alerts?$limit=30&$relationships=true&$fsr_max_relation_count=100",
+                "checkboxFields": true,
+                "step_variables": {
+                    "assetList": "{{vars.steps.Get_Assets[0].assets}}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "49777bce-a442-4765-bd1a-f59477453b4d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Summary For Asset",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "value": "<p>Deployed FortiDeceptor Decoy:<\/p>\n\n<table>\n<tbody>\n<tr>\n<td>Asset<\/td>\n<td>Decoy ID<\/td>\n<td>Decoy Name<\/td>\n<\/tr>\n<p>{% for item in vars.commentResult %}<\/p>\n<tr>\n<td><a href=\"\/modules\/assets\/{{item.iri.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\"> {{(item.iri | fromIRI).hostname}}<\/a><\/td>\n<td>{{item.instance_id}}<\/td>\n<td>{{item.instance_name}}<\/td>\n<\/tr>\n<p>{% endfor %}<\/p>\n<\/tbody>\n<\/table>\n"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "40",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "86930f8a-7a7c-4761-bc7a-f6f545163eb7"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Deploy Decoy",
             "description": null,
             "arguments": {
@@ -145,160 +301,6 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Raise ServiceNow Ticket",
-            "description": null,
-            "arguments": {
-                "name": "ServiceNow",
-                "config": "0323f23c-3069-4e5b-b350-213e510d6bcc",
-                "params": {
-                    "state": "",
-                    "impact": "1",
-                    "urgency": "1",
-                    "category": "",
-                    "location": "",
-                    "severity": "1",
-                    "caller_id": "{{vars.loggedInUserName}}",
-                    "work_notes": "",
-                    "assigned_to": "{{vars.loggedInUserName}}",
-                    "description": "",
-                    "other_fields": "",
-                    "assignment_group": "",
-                    "short_description": "The asset has been quarantined; please take the appropriate action."
-                },
-                "version": "3.2.0",
-                "connector": "servicenow",
-                "operation": "create_incident",
-                "mock_result": "{\n  \"data\": {\n    \"result\": {\n      \"rfc\": \"\",\n      \"order\": \"\",\n      \"state\": \"2\",\n      \"active\": \"true\",\n      \"impact\": \"1\",\n      \"notify\": \"1\",\n      \"number\": \"INC0010001\",\n      \"parent\": \"\",\n      \"skills\": \"\",\n      \"sys_id\": \"\",\n      \"cmdb_ci\": \"\",\n      \"company\": \"\",\n      \"sla_due\": \"\",\n      \"urgency\": \"1\",\n      \"approval\": \"not requested\",\n      \"category\": \"inquiry\",\n      \"comments\": \"\",\n      \"contract\": \"\",\n      \"due_date\": \"\",\n      \"location\": \"\",\n      \"made_sla\": \"true\",\n      \"priority\": \"1\",\n      \"severity\": \"1\",\n      \"sys_tags\": \"\",\n      \"work_end\": \"\",\n      \"caller_id\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"caused_by\": \"\",\n      \"closed_at\": \"\",\n      \"closed_by\": \"\",\n      \"follow_up\": \"\",\n      \"knowledge\": \"false\",\n      \"opened_at\": \"\",\n      \"opened_by\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"close_code\": \"\",\n      \"escalation\": \"0\",\n      \"group_list\": \"\",\n      \"problem_id\": \"\",\n      \"sys_domain\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"user_input\": \"\",\n      \"watch_list\": \"\",\n      \"work_notes\": \"\",\n      \"work_start\": \"\",\n      \"assigned_to\": {\n        \"link\": \"\",\n        \"value\": \"\"\n      },\n      \"close_notes\": \"\",\n      \"description\": \"\",\n      \"hold_reason\": \"\",\n      \"reopened_by\": \"\",\n      \"resolved_at\": \"\",\n      \"resolved_by\": \"\",\n      \"subcategory\": \"\",\n      \"time_worked\": \"\",\n      \"upon_reject\": \"cancel\",\n      \"activity_due\": \"\",\n      \"approval_set\": \"\",\n      \"business_stc\": \"\",\n      \"calendar_stc\": \"\",\n      \"contact_type\": \"\",\n      \"reopen_count\": \"0\",\n      \"route_reason\": \"\",\n      \"delivery_plan\": \"\",\n      \"delivery_task\": \"\",\n      \"reopened_time\": \"\",\n      \"sys_mod_count\": \"0\",\n      \"upon_approval\": \"proceed\",\n      \"correlation_id\": \"\",\n      \"expected_start\": \"\",\n      \"incident_state\": \"2\",\n      \"sys_class_name\": \"incident\",\n      \"sys_created_by\": \"admin\",\n      \"sys_created_on\": \"2023-01-04 13:27:20\",\n      \"sys_updated_by\": \"admin\",\n      \"sys_updated_on\": \"2023-01-04 13:27:20\",\n      \"child_incidents\": \"0\",\n      \"parent_incident\": \"\",\n      \"sys_domain_path\": \"\/\",\n      \"work_notes_list\": \"\",\n      \"approval_history\": \"\",\n      \"assignment_group\": \"\",\n      \"business_service\": \"\",\n      \"service_offering\": \"\",\n      \"business_duration\": \"\",\n      \"calendar_duration\": \"\",\n      \"short_description\": \"The asset has been quarantined; please take the appropriate action.\",\n      \"universal_request\": \"\",\n      \"reassignment_count\": \"0\",\n      \"correlation_display\": \"\",\n      \"task_effective_number\": \"INC0010001\",\n      \"comments_and_work_notes\": \"\",\n      \"additional_assignee_list\": \"\"\n    }\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null\n}",
-                "operationTitle": "Create Incident",
-                "pickFromTenant": false,
-                "step_variables": []
-            },
-            "status": null,
-            "top": "440",
-            "left": "640",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
-            "group": null,
-            "uuid": "2338c874-8d7a-480c-b799-a983fbda44f1"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Add Comment On Asset",
-            "description": null,
-            "arguments": {
-                "for_each": {
-                    "item": "{{vars.commentResult}}",
-                    "__bulk": true,
-                    "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
-                },
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "assets": "{{vars.item.iri}}",
-                    "people": [],
-                    "content": "<p>Deployed FortiDeceptor Decoy with Instance id: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.item.instance_id}}<\/span> and Instance Name: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.item.instance_name}}<\/span><\/p>",
-                    "__replace": "",
-                    "isImportant": true,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "protocol": "Overwrite",
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "40",
-            "left": "640",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "2ea85c65-f546-4d3c-a490-5a5c80bdada0"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Configuration",
-            "description": null,
-            "arguments": {
-                "templateID": "3050921492680610041",
-                "useMockOutput": "{{globalVars.Demo_mode}}",
-                "loggedInUserName": "{% set user = vars.request.currentUser | fromIRI %}{{user.firstname}}{{user.lastname}}"
-            },
-            "status": null,
-            "top": "165",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "ac207caa-e22f-49fb-9c76-1b7f10fb110c"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Add Decoy Comment On Alert",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "alerts": "{{vars.input.records[0]['@id']}}",
-                    "people": [],
-                    "content": "<p>{{vars.steps.Summary_For_Asset.data['formatted_string']}}<\/p>",
-                    "__replace": "",
-                    "isImportant": true,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "160",
-            "left": "1020",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "26883260-9707-42a0-a3f4-3792950b1ff9"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Assets",
-            "description": null,
-            "arguments": {
-                "query": {
-                    "sort": [],
-                    "limit": 30,
-                    "logic": "AND",
-                    "filters": [
-                        {
-                            "type": "primitive",
-                            "field": "uuid",
-                            "value": "{{vars.input.records[0].uuid}}",
-                            "operator": "eq",
-                            "_operator": "eq"
-                        }
-                    ],
-                    "__selectFields": [
-                        "assets"
-                    ]
-                },
-                "module": "alerts?$limit=30&$relationships=true&$fsr_max_relation_count=100",
-                "checkboxFields": true,
-                "step_variables": {
-                    "assetList": "{{vars.steps.Get_Assets[0].assets}}"
-                }
-            },
-            "status": null,
-            "top": "300",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
-            "group": null,
-            "uuid": "49777bce-a442-4765-bd1a-f59477453b4d"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Add Asset Comment On Alert",
             "description": null,
             "arguments": {
@@ -328,56 +330,54 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Quarantine Asset In FortiEDR",
+            "name": "Configuration",
             "description": null,
             "arguments": {
-                "name": "Fortinet FortiEDR",
-                "config": "a6fdf914-7190-4c2f-bbb0-29469ad5d6a4",
-                "params": {
-                    "type": "Name",
-                    "devices": "{{vars.item.hostname}}",
-                    "organization": ""
-                },
-                "version": "1.3.1",
-                "for_each": {
-                    "item": "{{vars.assetList}}",
-                    "parallel": false,
-                    "condition": ""
-                },
-                "connector": "fortinet-fortiedr",
-                "operation": "isolate_collector",
-                "mock_result": "{\n  \"data\": {\n    \"result\": \"Successfully executed isolate_collector\"\n  },\n  \"status\": \"Success\",\n  \"_status\": true,\n  \"message\": \"\",\n  \"operation\": null,\n  \"request_id\": null\n}",
-                "operationTitle": "Isolate Collector",
-                "pickFromTenant": false,
-                "step_variables": []
+                "templateID": "3050921492680610041",
+                "useMockOutput": "{{globalVars.Demo_mode}}",
+                "loggedInUserName": "{% set user = vars.request.currentUser | fromIRI %}{{user.firstname}}{{user.lastname}}"
             },
             "status": null,
-            "top": "160",
-            "left": "640",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "38cb7c01-11bc-494d-9d47-4f83efda58b6"
+            "uuid": "ac207caa-e22f-49fb-9c76-1b7f10fb110c"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Summary For Asset",
+            "name": "Start",
             "description": null,
             "arguments": {
-                "params": {
-                    "value": "<p>Deployed FortiDeceptor Decoy:<\/p>\n\n<table>\n<tbody>\n<tr>\n<td>Asset<\/td>\n<td>Decoy ID<\/td>\n<td>Decoy Name<\/td>\n<\/tr>\n<p>{% for item in vars.commentResult %}<\/p>\n<tr>\n<td><a href=\"\/modules\/assets\/{{item.iri.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\"> {{(item.iri | fromIRI).hostname}}<\/a><\/td>\n<td>{{item.instance_id}}<\/td>\n<td>{{item.instance_name}}<\/td>\n<\/tr>\n<p>{% endfor %}<\/p>\n<\/tbody>\n<\/table>\n"
+                "route": "c6c6638d-e70b-41ef-9fac-182de7ced7b6",
+                "resources": [
+                    "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
                 },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "format_richtext",
-                "operationTitle": "Utils: Format as RichText (Markdown)",
-                "step_variables": []
+                "displayConditions": {
+                    "alerts": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": []
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "singleRecordExecution": true
             },
             "status": null,
-            "top": "40",
-            "left": "1020",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "86930f8a-7a7c-4761-bc7a-f6f545163eb7"
+            "uuid": "f928f2fe-0789-455a-b955-4478684d9f96"
         }
     ],
     "routes": [
@@ -493,6 +493,7 @@
         "Alerts",
         "Assets",
         "FortiEDR",
-        "FortiDECEPTOR"
+        "FortiDECEPTOR",
+        "Nozomi"
     ]
 }

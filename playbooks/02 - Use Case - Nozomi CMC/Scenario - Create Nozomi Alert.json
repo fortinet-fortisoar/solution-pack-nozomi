@@ -11,44 +11,10 @@
     "remoteExecutableFlag": false,
     "parameters": [],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Update CVEs With ICS Advisory",
-            "description": null,
-            "arguments": {
-                "for_each": {
-                    "item": "{{vars.cVE}}",
-                    "__bulk": true,
-                    "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
-                },
-                "resource": {
-                    "__link": {
-                        "recordTags": [],
-                        "iCSAdvisories": "{{vars.cVEiCSAdvisoryDict[vars.item[\"@id\"]]}}"
-                    }
-                },
-                "operation": "Append",
-                "collection": "{{vars.item[\"@id\"]}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/c_v_es",
-                "fieldOperation": {
-                    "recordTags": "Append"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "840",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "98962208-3d6f-4b65-9958-43619ed06a4b"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Output",
@@ -91,76 +57,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "335ddb91-9138-4315-bc5f-777f81bad82b"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Create ICS Advisory Record",
-            "description": null,
-            "arguments": {
-                "for_each": {
-                    "item": "{{vars.iCSAdvisoryData}}",
-                    "__bulk": true,
-                    "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
-                },
-                "resource": {
-                    "year": "{{vars.item.year}}",
-                    "cVEID": "{{vars.item.cVEID}}",
-                    "cWEID": "{{vars.item.cWEID}}",
-                    "vendor": "{{vars.item.vendor}}",
-                    "iCSAUrl": "{{vars.item.iCSAUrl}}",
-                    "product": "{{vars.item.product}}",
-                    "__replace": "false",
-                    "iCSCERTID": "{{vars.item.iCSCERTID}}",
-                    "recordTags": "{{vars.item.recordTags}}",
-                    "sourceData": "{{vars.item.sourceData}}",
-                    "lastUpdated": "{{vars.item.lastUpdated}}",
-                    "cVSSSeverity": "{{vars.item.cVSSSeverity['@id']}}",
-                    "iCSCERTTitle": "{{vars.item.iCSCERTTitle}}",
-                    "cumulativeCVSS": "{{vars.item.cumulativeCVSS}}",
-                    "affectedProducts": "{{vars.item.affectedProducts}}",
-                    "companyHeadquarters": "{{vars.item.companyHeadquarters}}",
-                    "originalReleaseDate": "{{vars.item.originalReleaseDate}}",
-                    "countriesAreasDeployed": "{{vars.item.countriesAreasDeployed}}",
-                    "criticalInfrastructureSector": "{{vars.item.criticalInfrastructureSector}}"
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/upsert\/i_c_s_advisories",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": {
-                    "__dummy": "{{vars.recordIRI.extend(vars.steps.Create_ICS_Advisory_Record | json_query('[*][\"@id\"][]'))}}",
-                    "cVEiCSAdvisoryDict": "{% set output = {} %}\n{% for data in vars.cVE %}\n{% set iri = data['@id'] %}\n{% set _ = output.update({iri: []}) %}\n{% for item in vars.steps.Create_ICS_Advisory_Record %}\n{% if data.cVEID in item.cVEID %}\n{% set _ = output[iri].append(item['@id']) %}\n{% endif %}\n{% endfor %}\n{% endfor %}\n{{output}}"
-                }
-            },
-            "status": null,
-            "top": "705",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "f89d28a8-1e25-410c-b47b-611e30a5e78a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Configuration",
-            "description": null,
-            "arguments": {
-                "cVEData": "{{vars.extractedText['cVEData']}}",
-                "recordIRI": "[]",
-                "sSVCSchema": "{\n  \"Exploitation\": \"\",\n  \"Technical Impact\": \"\",\n  \"Automatable\": \"\",\n  \"Mission Prevalence\": \"\",\n  \"Well Being\": \"\",\n  \"Mitigation Status\": \"\",\n  \"Automatable Reason\": \"\"\n}",
-                "sourceData": "{\n  \"id\": \"d3ccb59f-0eae-4987-84aa-e9eb83edfb57\",\n  \"ack\": false,\n  \"name\": \"Inactive protocol OFF\",\n  \"note\": null,\n  \"risk\": \"0.0\",\n  \"time\": 1678918306912,\n  \"id_dst\": \"224.0.0.252\",\n  \"id_src\": \"10.132.254.110\",\n  \"ip_dst\": \"224.0.0.252\",\n  \"ip_src\": \"10.132.254.110\",\n  \"status\": \"open\",\n  \"mac_dst\": \"01:00:5e:00:00:fc\",\n  \"mac_src\": \"00:0c:29:5f:74:57\",\n  \"parents\": [],\n  \"type_id\": \"NET:INACTIVE-PROTOCOL\",\n  \"port_dst\": null,\n  \"port_src\": null,\n  \"protocol\": \"llmnr\",\n  \"severity\": 0,\n  \"zone_dst\": \"Multicast\",\n  \"zone_src\": \"10.132.0.0\/16\",\n  \"dst_roles\": \"other\",\n  \"label_dst\": null,\n  \"label_src\": \"FSR-PROD-WIN10-\",\n  \"src_roles\": \"other\",\n  \"type_name\": \"Inactive protocol\",\n  \"types_dst\": [\n    \"broadcast\"\n  ],\n  \"types_src\": [\n    \"computer\"\n  ],\n  \"bpf_filter\": \"(ip host 10.132.254.110 and ip host 224.0.0.252 and (udp port 5355)) or (vlan and ip host 10.132.254.110 and ip host 224.0.0.252 and (udp port 5355))\",\n  \"levels_dst\": [\n    \"\"\n  ],\n  \"levels_src\": [\n    \"\"\n  ],\n  \"properties\": {\n    \"raised_by\": \"n2os_ids\",\n    \"mitre_attack_for_ics\": {\n      \"source\": {\n        \"types\": [\n          \"Engineering Workstation\"\n        ]\n      }\n    }\n  },\n  \"replicated\": false,\n  \"session_id\": null,\n  \"trigger_id\": null,\n  \"closed_time\": 0,\n  \"description\": \"Link is active\",\n  \"is_incident\": false,\n  \"is_security\": false,\n  \"threat_name\": \"\",\n  \"appliance_id\": \"1fb4918e-ed88-4717-82ec-28fec97dd6be\",\n  \"appliance_ip\": \"10.132.254.15\",\n  \"created_time\": 1678918306912,\n  \"synchronized\": false,\n  \"trigger_type\": null,\n  \"incident_keys\": [],\n  \"appliance_host\": \"nozomi-n2os.local\",\n  \"appliance_site\": null,\n  \"capture_device\": \"\",\n  \"assertion_source\": \"\",\n  \"transport_protocol\": \"unknown\",\n  \"sec_profile_visible\": true,\n  \"mitre_attack_tactics\": null,\n  \"additional_description\": {},\n  \"mitre_attack_techniques\": null\n}",
-                "kEVAlertData": "{{vars.extractedText['kEVAlertData']}}",
-                "iCSAdvisoryData": "{{vars.extractedText['iCSAdvisoryData']}}"
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "708ae4ac-c69b-43c5-b8a0-5f1527d2c9c4"
         },
         {
             "@type": "WorkflowStep",
@@ -265,32 +161,74 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get JSON Data",
+            "name": "Configuration",
             "description": null,
             "arguments": {
-                "query": {
-                    "sort": [],
-                    "limit": 30,
-                    "logic": "AND",
-                    "filters": [
-                        {
-                            "type": "primitive",
-                            "field": "name",
-                            "value": "Nozomi - Sample Data",
-                            "operator": "eq",
-                            "_operator": "eq"
-                        }
-                    ]
+                "cVEData": "{{vars.extractedText['cVEData']}}",
+                "recordIRI": "[]",
+                "sSVCSchema": "{\n  \"Exploitation\": \"\",\n  \"Technical Impact\": \"\",\n  \"Automatable\": \"\",\n  \"Mission Prevalence\": \"\",\n  \"Well Being\": \"\",\n  \"Mitigation Status\": \"\",\n  \"Automatable Reason\": \"\"\n}",
+                "sourceData": "{\n  \"id\": \"d3ccb59f-0eae-4987-84aa-e9eb83edfb57\",\n  \"ack\": false,\n  \"name\": \"Inactive protocol OFF\",\n  \"note\": null,\n  \"risk\": \"0.0\",\n  \"time\": 1678918306912,\n  \"id_dst\": \"224.0.0.252\",\n  \"id_src\": \"10.132.254.110\",\n  \"ip_dst\": \"224.0.0.252\",\n  \"ip_src\": \"10.132.254.110\",\n  \"status\": \"open\",\n  \"mac_dst\": \"01:00:5e:00:00:fc\",\n  \"mac_src\": \"00:0c:29:5f:74:57\",\n  \"parents\": [],\n  \"type_id\": \"NET:INACTIVE-PROTOCOL\",\n  \"port_dst\": null,\n  \"port_src\": null,\n  \"protocol\": \"llmnr\",\n  \"severity\": 0,\n  \"zone_dst\": \"Multicast\",\n  \"zone_src\": \"10.132.0.0\/16\",\n  \"dst_roles\": \"other\",\n  \"label_dst\": null,\n  \"label_src\": \"FSR-PROD-WIN10-\",\n  \"src_roles\": \"other\",\n  \"type_name\": \"Inactive protocol\",\n  \"types_dst\": [\n    \"broadcast\"\n  ],\n  \"types_src\": [\n    \"computer\"\n  ],\n  \"bpf_filter\": \"(ip host 10.132.254.110 and ip host 224.0.0.252 and (udp port 5355)) or (vlan and ip host 10.132.254.110 and ip host 224.0.0.252 and (udp port 5355))\",\n  \"levels_dst\": [\n    \"\"\n  ],\n  \"levels_src\": [\n    \"\"\n  ],\n  \"properties\": {\n    \"raised_by\": \"n2os_ids\",\n    \"mitre_attack_for_ics\": {\n      \"source\": {\n        \"types\": [\n          \"Engineering Workstation\"\n        ]\n      }\n    }\n  },\n  \"replicated\": false,\n  \"session_id\": null,\n  \"trigger_id\": null,\n  \"closed_time\": 0,\n  \"description\": \"Link is active\",\n  \"is_incident\": false,\n  \"is_security\": false,\n  \"threat_name\": \"\",\n  \"appliance_id\": \"1fb4918e-ed88-4717-82ec-28fec97dd6be\",\n  \"appliance_ip\": \"10.132.254.15\",\n  \"created_time\": 1678918306912,\n  \"synchronized\": false,\n  \"trigger_type\": null,\n  \"incident_keys\": [],\n  \"appliance_host\": \"nozomi-n2os.local\",\n  \"appliance_site\": null,\n  \"capture_device\": \"\",\n  \"assertion_source\": \"\",\n  \"transport_protocol\": \"unknown\",\n  \"sec_profile_visible\": true,\n  \"mitre_attack_tactics\": null,\n  \"additional_description\": {},\n  \"mitre_attack_techniques\": null\n}",
+                "kEVAlertData": "{{vars.extractedText['kEVAlertData']}}",
+                "iCSAdvisoryData": "{{vars.extractedText['iCSAdvisoryData']}}"
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "708ae4ac-c69b-43c5-b8a0-5f1527d2c9c4"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update CVEs With ICS Advisory",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.cVE}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
                 },
-                "module": "attachments?$limit=30",
+                "resource": {
+                    "__link": {
+                        "recordTags": [],
+                        "iCSAdvisories": "{{vars.cVEiCSAdvisoryDict[vars.item[\"@id\"]]}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.item[\"@id\"]}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/c_v_es",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
-            "top": "165",
+            "top": "840",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "e8de1879-e154-4e1f-96bc-c20dd2eb24fb"
+            "uuid": "98962208-3d6f-4b65-9958-43619ed06a4b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d"
         },
         {
             "@type": "WorkflowStep",
@@ -321,21 +259,83 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Start",
+            "name": "Get JSON Data",
             "description": null,
             "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "name",
+                            "value": "Nozomi - Sample CVEs, ICS Advisory, KEV Alert And Alert",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ]
+                },
+                "module": "attachments?$limit=30",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "e8de1879-e154-4e1f-96bc-c20dd2eb24fb"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create ICS Advisory Record",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.iCSAdvisoryData}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "year": "{{vars.item.year}}",
+                    "cVEID": "{{vars.item.cVEID}}",
+                    "cWEID": "{{vars.item.cWEID}}",
+                    "vendor": "{{vars.item.vendor}}",
+                    "iCSAUrl": "{{vars.item.iCSAUrl}}",
+                    "product": "{{vars.item.product}}",
+                    "__replace": "false",
+                    "iCSCERTID": "{{vars.item.iCSCERTID}}",
+                    "recordTags": "{{vars.item.recordTags}}",
+                    "sourceData": "{{vars.item.sourceData}}",
+                    "lastUpdated": "{{vars.item.lastUpdated}}",
+                    "cVSSSeverity": "{{vars.item.cVSSSeverity['@id']}}",
+                    "iCSCERTTitle": "{{vars.item.iCSCERTTitle}}",
+                    "cumulativeCVSS": "{{vars.item.cumulativeCVSS}}",
+                    "affectedProducts": "{{vars.item.affectedProducts}}",
+                    "companyHeadquarters": "{{vars.item.companyHeadquarters}}",
+                    "originalReleaseDate": "{{vars.item.originalReleaseDate}}",
+                    "countriesAreasDeployed": "{{vars.item.countriesAreasDeployed}}",
+                    "criticalInfrastructureSector": "{{vars.item.criticalInfrastructureSector}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/upsert\/i_c_s_advisories",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
                 "step_variables": {
-                    "input": {
-                        "params": []
-                    }
+                    "__dummy": "{{vars.recordIRI.extend(vars.steps.Create_ICS_Advisory_Record | json_query('[*][\"@id\"][]'))}}",
+                    "cVEiCSAdvisoryDict": "{% set output = {} %}\n{% for data in vars.cVE %}\n{% set iri = data['@id'] %}\n{% set _ = output.update({iri: []}) %}\n{% for item in vars.steps.Create_ICS_Advisory_Record %}\n{% if data.cVEID in item.cVEID %}\n{% set _ = output[iri].append(item['@id']) %}\n{% endif %}\n{% endfor %}\n{% endfor %}\n{{output}}"
                 }
             },
             "status": null,
-            "top": "30",
+            "top": "705",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "9b5a01c1-3ef7-4701-b5eb-ef3a8c626f7d"
+            "uuid": "f89d28a8-1e25-410c-b47b-611e30a5e78a"
         }
     ],
     "routes": [

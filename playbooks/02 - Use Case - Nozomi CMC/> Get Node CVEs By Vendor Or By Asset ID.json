@@ -15,7 +15,7 @@
         "vendor"
     ],
     "synchronous": false,
-    "collection": "\/api\/3\/workflow_collections\/b9d86849-ad02-4b08-bacc-793c9e9c387b",
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/d3613a5f-7603-4a9e-9439-130be7c94466",
     "steps": [
@@ -52,89 +52,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "21a4a9a0-e9ba-41c4-a6bf-e797804d8993"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Configuration",
-            "description": null,
-            "arguments": {
-                "cVE": "[]",
-                "sSVCSchema": "{\n  \"Exploitation\": \"\",\n  \"Technical Impact\": \"\",\n  \"Automatable\": \"\",\n  \"Mission Prevalence\": \"\",\n  \"Well Being\": \"\",\n  \"Mitigation Status\": \"\",\n  \"Automatable Reason\": \"\"\n}",
-                "useMockOutput": "{{globalVars.Demo_mode}}"
-            },
-            "status": null,
-            "top": "165",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "9ff67954-f632-49bc-9624-7b837f7352ff"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "By Asset Id Or By Vendor",
-            "description": null,
-            "arguments": {
-                "conditions": [
-                    {
-                        "option": "Asset Id",
-                        "step_iri": "\/api\/3\/workflow_steps\/298c99fc-af86-4b21-b43b-1e47362d56fd",
-                        "condition": "{{ vars.input.params.assetId != \"\" }}",
-                        "step_name": "Get Node CVEs By Asset Id"
-                    },
-                    {
-                        "option": "Vendor",
-                        "step_iri": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
-                        "condition": "{{ vars.input.params.vendor != \"\" }}",
-                        "step_name": "Get Node CVEs By Vendor"
-                    }
-                ]
-            },
-            "status": null,
-            "top": "300",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-            "group": null,
-            "uuid": "ee164e0b-7f80-4db4-846b-683d231b8718"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Create Not Found CVEs",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.notFoundCVEId | length > 0}}",
-                "for_each": {
-                    "item": "{{vars.notFoundCVEId}}",
-                    "__bulk": true,
-                    "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
-                },
-                "resource": {
-                    "sSVC": "{{vars.sSVCSchema | toJSON}}",
-                    "cVEID": "{{vars.item}}",
-                    "__replace": "true",
-                    "isInKEVCatalog": "\/api\/3\/picklists\/27ff216f-6363-4c93-9fc4-e0e8c15cb0b1",
-                    "__fieldsToUpdate": [
-                        "cVEID",
-                        "sSVC"
-                    ]
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/upsert\/c_v_es",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": {
-                    "__dummy": "{{vars.cVE.extend((vars.steps.Create_Not_Found_CVEs))}}"
-                }
-            },
-            "status": null,
-            "top": "705",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "cda2e242-7e07-44e5-87e3-056318be958a"
         },
         {
             "@type": "WorkflowStep",
@@ -177,6 +94,22 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "41347a9b-2921-41f3-a229-e7f94278c42b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "cVE": "[]",
+                "sSVCSchema": "{\n  \"Exploitation\": \"\",\n  \"Technical Impact\": \"\",\n  \"Automatable\": \"\",\n  \"Mission Prevalence\": \"\",\n  \"Well Being\": \"\",\n  \"Mitigation Status\": \"\",\n  \"Automatable Reason\": \"\"\n}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "9ff67954-f632-49bc-9624-7b837f7352ff"
         },
         {
             "@type": "WorkflowStep",
@@ -247,6 +180,46 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Create Not Found CVEs",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.notFoundCVEId | length > 0}}",
+                "for_each": {
+                    "item": "{{vars.notFoundCVEId}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "sSVC": "{{vars.sSVCSchema | toJSON}}",
+                    "cVEID": "{{vars.item}}",
+                    "__replace": "true",
+                    "isInKEVCatalog": "\/api\/3\/picklists\/27ff216f-6363-4c93-9fc4-e0e8c15cb0b1",
+                    "__fieldsToUpdate": [
+                        "cVEID",
+                        "sSVC"
+                    ]
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/upsert\/c_v_es",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": {
+                    "__dummy": "{{vars.cVE.extend((vars.steps.Create_Not_Found_CVEs))}}"
+                }
+            },
+            "status": null,
+            "top": "705",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "cda2e242-7e07-44e5-87e3-056318be958a"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
@@ -287,6 +260,33 @@
             "stepType": "\/api\/3\/workflow_step_types\/1fdd14cc-d6b4-4335-a3af-ab49c8ed2fd8",
             "group": null,
             "uuid": "d9ad4180-b7b7-443d-b935-4941720937c5"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "By Asset Id Or By Vendor",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Asset Id",
+                        "step_iri": "\/api\/3\/workflow_steps\/298c99fc-af86-4b21-b43b-1e47362d56fd",
+                        "condition": "{{ vars.input.params.assetId != \"\" }}",
+                        "step_name": "Get Node CVEs By Asset Id"
+                    },
+                    {
+                        "option": "Vendor",
+                        "step_iri": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
+                        "condition": "{{ vars.input.params.vendor != \"\" }}",
+                        "step_name": "Get Node CVEs By Vendor"
+                    }
+                ]
+            },
+            "status": null,
+            "top": "300",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "ee164e0b-7f80-4db4-846b-683d231b8718"
         }
     ],
     "routes": [
