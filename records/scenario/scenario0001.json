@@ -7,10 +7,10 @@
         "steps": {
             "Steps": [
                 {
-                    "name": "Alert Creation Scenario",
+                    "name": "Scenario - Create Nozomi Alert.",
                     "type": "executePlaybook",
                     "playbookIRI": "\/api\/3\/workflows\/f9bdb309-cc12-461f-9613-0d9d08f11406",
-                    "preCreateMessage": "Creating Alert and Asset demo record for Stuxnet Alert",
+                    "preCreateMessage": "Creating CVEs, ICS Advisroy, KEV Alert and Alert demo records.",
                     "postCreateMessage": "",
                     "waitTimeforNextStep": "0"
                 }
