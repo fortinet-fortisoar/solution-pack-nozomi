@@ -25,7 +25,7 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "assets": "{{vars.record[\"@id\"]}}",
                     "people": [],
-                    "content": "<p>KEV Alert for Asset vendor: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<p>{% if vars.kEVAlertIRI | length &gt; 0 %}<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{(item | fromIRI).title}} <\/a><br \/>{% endfor %}<\/p>\n<p>{% endif %}<\/p>",
+                    "content": "<p>{{vars.steps.Summary_On_Asset.data['formatted_string']}}<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false
@@ -39,7 +39,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
+            "top": "705",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
@@ -145,6 +145,28 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Summary On Asset",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
+                "params": {
+                    "value": "<p>KEV Alert for Asset vendor: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<p>{% if vars.kEVAlertIRI | length > 0 %}<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{(item | fromIRI).title}} <\/a><br \/>{% endfor %}<\/p>\n<p>{% endif %}<\/p>"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "26e975a7-69d2-4c5c-a26d-954ac85da5f2"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Update Asset With KEV Alert_ICS Advisory_CVEs",
             "description": null,
             "arguments": {
@@ -206,13 +228,23 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Asset With KEV Alert_ICS Advisory_CVEs -> Add Comment",
+            "name": "Summary On Asset -> Add Comment",
             "targetStep": "\/api\/3\/workflow_steps\/b8ad6c76-96fc-4ccb-93ae-83caf52a807b",
+            "sourceStep": "\/api\/3\/workflow_steps\/26e975a7-69d2-4c5c-a26d-954ac85da5f2",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "85dbf1b2-ecd2-4cab-a443-3d8be87192d4"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Asset With KEV Alert_ICS Advisory_CVEs -> Summary On Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/26e975a7-69d2-4c5c-a26d-954ac85da5f2",
             "sourceStep": "\/api\/3\/workflow_steps\/4a3b2798-ea48-44c4-b4de-5606dcecaeac",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "bd8131aa-ebb5-46b5-815e-c93e8a4855ce"
+            "uuid": "76729df6-cd75-41e6-9527-39bb88aafd19"
         }
     ],
     "groups": [],

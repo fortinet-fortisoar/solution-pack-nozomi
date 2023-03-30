@@ -628,6 +628,7 @@
         "iCSAUrl": "https://www.cisa.gov/news-events/ics-advisories/icsa-23-075-01",
         "product": "Busybox Applet affecting SCALANCE and RUGGEDCOM products",
         "assignee": "",
+        "iCSCERTID": "ICSA-23-075-01",
         "recordTags": [
           "KEV",
           "Multiple Critical Sectors",
@@ -850,7 +851,7 @@
       {
         "title": "ICSA-23-075-01 - Siemens",
         "report": null,
-        "summary": "<h4>ICSA Advisory <a href=\"/modules/i_c_s_advisories/81662e7c-3c3c-4db1-9c32-03b5d8bc1c02\" target=\"_blank\" rel=\"noopener\">ICSA-23-075-01</a> contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
+        "summary": "<h4>ICSA Advisory ICSA-23-075-01 contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
         "recordTags": [
           "Siemens",
           "KEV",
@@ -887,7 +888,7 @@
       {
         "title": "ICSA-22-167-16 - Siemens",
         "report": null,
-        "summary": "<h4>ICSA Advisory <a href=\"/modules/i_c_s_advisories/e7b7fe83-6d15-46d6-ac7c-133bf44233f5\" target=\"_blank\" rel=\"noopener\">ICSA-22-167-16</a> contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
+        "summary": "<h4>ICSA Advisory ICSA-22-167-16 contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
         "recordTags": [
           "CVE-2021-4034",
           "ICSA-22-167-16",
@@ -916,7 +917,7 @@
       {
         "title": "ICSA-22-167-09 - Siemens",
         "report": null,
-        "summary": "<h4>ICSA Advisory <a href=\"/modules/i_c_s_advisories/ad78c946-8223-4b1f-8139-d42ca48172b3\" target=\"_blank\" rel=\"noopener\">ICSA-22-167-09</a> contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
+        "summary": "<h4>ICSA Advisory ICSA-22-167-09 contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
         "recordTags": [
           "CVE-2022-0847",
           "ICSA-22-167-09",
@@ -945,7 +946,7 @@
       {
         "title": "ICSMA-17-215-01 - Siemens",
         "report": null,
-        "summary": "<h4>ICSA Advisory <a href=\"/modules/i_c_s_advisories/5d4ceaa6-acdd-4ab2-a46b-493886346a6a\" target=\"_blank\" rel=\"noopener\">ICSMA-17-215-01</a> contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
+        "summary": "<h4>ICSA Advisory ICSMA-17-215-01 contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
         "recordTags": [
           "CVE-2017-7269",
           "ICSMA-17-215-01",
@@ -974,7 +975,7 @@
       {
         "title": "ICSA-16-327-01 - Siemens",
         "report": null,
-        "summary": "<h4>ICSA Advisory <a href=\"/modules/i_c_s_advisories/6cce6ef9-c547-45c7-a948-5d691e7537bd\" target=\"_blank\" rel=\"noopener\">ICSA-16-327-01</a> contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
+        "summary": "<h4>ICSA Advisory ICSA-16-327-01 contains certain Known Exploitable Vulnerabilities(KEV) that are associated in your environment with the product vendor <span style=\"color: red\">Siemens<span>.</h4>\n\n<h4><br>\nNext Steps - \n\n1. **Evaluation** - Provide Inputs To Analyze Vulnerability Categorization (SSVC, Stakeholder-Specific Vulnerability Categorization)\n2. **Remediation** - Provide Inputs To Check Patch Availability and get remediation recommendations\n3. **Reports** - Schedule from available status reports to be on top of Advisory mitigation and containment progress.</h4>",
         "recordTags": [
           "CVE-2016-8562",
           "ICSA-16-327-01",
