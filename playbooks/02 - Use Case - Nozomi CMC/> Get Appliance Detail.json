@@ -4,7 +4,7 @@
     "name": "> Get Appliance Detail",
     "aliasName": null,
     "tag": null,
-    "description": "Playbook gets Appliance detail from Nozomi by Appliance ID.",
+    "description": "Playbook gets Appliance detail from Nozomi CMC by Appliance ID.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -17,6 +17,20 @@
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/cbed0467-ba56-4c5b-a76a-890ffcb317aa",
     "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "ecad95ea-cb8d-4fa4-8d9a-48684027276c"
+        },
         {
             "@type": "WorkflowStep",
             "name": "Create Appliance Comment",
@@ -48,24 +62,6 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Start",
-            "description": null,
-            "arguments": {
-                "step_variables": {
-                    "input": {
-                        "params": []
-                    }
-                }
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
-            "group": null,
-            "uuid": "cbed0467-ba56-4c5b-a76a-890ffcb317aa"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Get Appliance Details",
             "description": null,
             "arguments": {
@@ -92,17 +88,21 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Configuration",
+            "name": "Start",
             "description": null,
             "arguments": {
-                "useMockOutput": "{{globalVars.Demo_mode}}"
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
             },
             "status": null,
-            "top": "165",
+            "top": "30",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "ecad95ea-cb8d-4fa4-8d9a-48684027276c"
+            "uuid": "cbed0467-ba56-4c5b-a76a-890ffcb317aa"
         }
     ],
     "routes": [
@@ -113,16 +113,8 @@
             "sourceStep": "\/api\/3\/workflow_steps\/ecad95ea-cb8d-4fa4-8d9a-48684027276c",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "1a0240d0-04d6-4295-8883-5da1195fd0b9"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/ecad95ea-cb8d-4fa4-8d9a-48684027276c",
-            "sourceStep": "\/api\/3\/workflow_steps\/cbed0467-ba56-4c5b-a76a-890ffcb317aa",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "347cdb1c-dd96-4e8c-93a8-419aa3aa7947"
         },
         {
             "@type": "WorkflowRoute",
@@ -131,7 +123,18 @@
             "sourceStep": "\/api\/3\/workflow_steps\/e9c109a9-b792-44ac-8c03-b4e35d926961",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "54d8112e-b615-4d99-9c86-d9f93edb6bff"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/ecad95ea-cb8d-4fa4-8d9a-48684027276c",
+            "sourceStep": "\/api\/3\/workflow_steps\/cbed0467-ba56-4c5b-a76a-890ffcb317aa",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "347cdb1c-dd96-4e8c-93a8-419aa3aa7947"
         }
     ],
     "groups": [],
@@ -143,7 +146,7 @@
     "recordTags": [
         "Alert",
         "Referenced",
-        "Appliance",
-        "Nozomi"
+        "Nozomi",
+        "Appliance"
     ]
 }

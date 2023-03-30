@@ -4,7 +4,7 @@
     "name": "> Get Node CVEs By Vendor Or By Asset ID",
     "aliasName": null,
     "tag": null,
-    "description": "Playbook fetches CVEs from Nozomi by vendor or by asset id.",
+    "description": "Playbook fetches CVEs from Nozomi CMC by vendor or by asset id.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -55,45 +55,30 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get Node CVEs By Asset Id",
+            "name": "By Asset Id Or By Vendor",
             "description": null,
             "arguments": {
-                "name": "Nozomi Networks Central Management Console",
-                "config": "b7cfa08d-0c1d-40a0-8ad9-efe8f6ca7e33",
-                "params": {
-                    "query": "| where asset_id == {{vars.input.params.assetId}}",
-                    "appliance_ids": "{{vars.input.params.applianceId}}"
-                },
-                "version": "1.0.0",
-                "connector": "nozomi-networks-central-management-console",
-                "operation": "get_node_cves",
-                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"id\": 123,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2022-0847\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      },\n      {\n        \"id\": 124,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2021-4034\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      }\n    ]\n  }\n}",
-                "operationTitle": "Get Node CVEs",
-                "pickFromTenant": false,
-                "step_variables": {
-                    "cVEIdList": "{{vars.steps.Get_Node_CVEs_By_Asset_Id.data.result | json_query('[*][\"cve\"][]') }}"
-                }
+                "conditions": [
+                    {
+                        "option": "Asset Id",
+                        "step_iri": "\/api\/3\/workflow_steps\/298c99fc-af86-4b21-b43b-1e47362d56fd",
+                        "condition": "{{ vars.input.params.assetId != \"\" }}",
+                        "step_name": "Get Node CVEs By Asset Id"
+                    },
+                    {
+                        "option": "Vendor",
+                        "step_iri": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
+                        "condition": "{{ vars.input.params.vendor != \"\" }}",
+                        "step_name": "Get Node CVEs By Vendor"
+                    }
+                ]
             },
             "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
-            "group": null,
-            "uuid": "298c99fc-af86-4b21-b43b-1e47362d56fd"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Output",
-            "description": null,
-            "arguments": {
-                "cVEResult": "{{vars.cVE}}"
-            },
-            "status": null,
-            "top": "1110",
+            "top": "300",
             "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "41347a9b-2921-41f3-a229-e7f94278c42b"
+            "uuid": "ee164e0b-7f80-4db4-846b-683d231b8718"
         },
         {
             "@type": "WorkflowStep",
@@ -110,73 +95,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "9ff67954-f632-49bc-9624-7b837f7352ff"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Node CVEs By Vendor",
-            "description": null,
-            "arguments": {
-                "name": "Nozomi Networks Central Management Console",
-                "config": "b7cfa08d-0c1d-40a0-8ad9-efe8f6ca7e33",
-                "params": {
-                    "query": "| where node_vendor == {{vars.input.params.vendor}}",
-                    "appliance_ids": "{{vars.input.params.applianceId}}"
-                },
-                "version": "1.0.0",
-                "connector": "nozomi-networks-central-management-console",
-                "operation": "get_node_cves",
-                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"id\": 125,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2017-7269\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      },\n      {\n        \"id\": 126,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2016-8562\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      }\n    ]\n  }\n}",
-                "operationTitle": "Get Node CVEs",
-                "pickFromTenant": false,
-                "step_variables": {
-                    "cVEIdList": "{{vars.steps.Get_Node_CVEs_By_Vendor.data.result | json_query('[*][\"cve\"][]') }}"
-                }
-            },
-            "status": null,
-            "top": "440",
-            "left": "480",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
-            "group": null,
-            "uuid": "b954238f-f5a7-4c5e-8a09-607466540919"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Find CVEs Record",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.cVEIdList | length > 0}}",
-                "query": {
-                    "sort": [],
-                    "limit": 30,
-                    "logic": "AND",
-                    "filters": [
-                        {
-                            "type": "primitive",
-                            "field": "cVEID",
-                            "value": "{{vars.cVEIdList}}",
-                            "operator": "in",
-                            "_operator": "in"
-                        }
-                    ],
-                    "__selectFields": [
-                        "cVEID",
-                        "isInKEVCatalog"
-                    ]
-                },
-                "module": "c_v_es?$limit=5000",
-                "checkboxFields": true,
-                "step_variables": {
-                    "__dummy": "{{vars.cVE.extend(vars.steps.Find_CVEs_Record)}}",
-                    "foundCVE": "{{vars.steps.Find_CVEs_Record}}",
-                    "notFoundCVEId": "{% set data =  vars.steps.Find_CVEs_Record | json_query('[*][\"cVEID\"][]') %}{{vars.cVEIdList | difference(data)}}"
-                }
-            },
-            "status": null,
-            "top": "570",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
-            "group": null,
-            "uuid": "cc5bd88b-45ea-41b1-aba3-04cc0d1aec7a"
         },
         {
             "@type": "WorkflowStep",
@@ -220,21 +138,112 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Start",
+            "name": "Find CVEs Record",
             "description": null,
             "arguments": {
+                "when": "{{vars.cVEIdList | length > 0}}",
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "cVEID",
+                            "value": "{{vars.cVEIdList}}",
+                            "operator": "in",
+                            "_operator": "in"
+                        }
+                    ],
+                    "__selectFields": [
+                        "cVEID",
+                        "isInKEVCatalog"
+                    ]
+                },
+                "module": "c_v_es?$limit=5000",
+                "checkboxFields": true,
                 "step_variables": {
-                    "input": {
-                        "params": []
-                    }
+                    "__dummy": "{{vars.cVE.extend(vars.steps.Find_CVEs_Record)}}",
+                    "foundCVE": "{{vars.steps.Find_CVEs_Record}}",
+                    "notFoundCVEId": "{% set data =  vars.steps.Find_CVEs_Record | json_query('[*][\"cVEID\"][]') %}{{vars.cVEIdList | difference(data)}}"
                 }
             },
             "status": null,
-            "top": "30",
+            "top": "570",
             "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "d3613a5f-7603-4a9e-9439-130be7c94466"
+            "uuid": "cc5bd88b-45ea-41b1-aba3-04cc0d1aec7a"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Node CVEs By Asset Id",
+            "description": null,
+            "arguments": {
+                "name": "Nozomi Networks Central Management Console",
+                "config": "b7cfa08d-0c1d-40a0-8ad9-efe8f6ca7e33",
+                "params": {
+                    "query": "| where asset_id == {{vars.input.params.assetId}}",
+                    "appliance_ids": "{{vars.input.params.applianceId}}"
+                },
+                "version": "1.0.0",
+                "connector": "nozomi-networks-central-management-console",
+                "operation": "get_node_cves",
+                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"id\": 123,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2022-0847\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      },\n      {\n        \"id\": 124,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2021-4034\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      }\n    ]\n  }\n}",
+                "operationTitle": "Get Node CVEs",
+                "pickFromTenant": false,
+                "step_variables": {
+                    "cVEIdList": "{{vars.steps.Get_Node_CVEs_By_Asset_Id.data.result | json_query('[*][\"cve\"][]') }}"
+                }
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "298c99fc-af86-4b21-b43b-1e47362d56fd"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Node CVEs By Vendor",
+            "description": null,
+            "arguments": {
+                "name": "Nozomi Networks Central Management Console",
+                "config": "b7cfa08d-0c1d-40a0-8ad9-efe8f6ca7e33",
+                "params": {
+                    "query": "| where node_vendor == {{vars.input.params.vendor}}",
+                    "appliance_ids": "{{vars.input.params.applianceId}}"
+                },
+                "version": "1.0.0",
+                "connector": "nozomi-networks-central-management-console",
+                "operation": "get_node_cves",
+                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"id\": 125,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2017-7269\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      },\n      {\n        \"id\": 126,\n        \"node_id\": \"\",\n        \"cve\": \"CVE-2016-8562\",\n        \"time\": \"\",\n        \"cwe_id\": \"\",\n        \"cwe_name\": \"\",\n        \"matching_cpes\": [],\n        \"likelihood\": \"\",\n        \"resolved\": \"\",\n        \"resolved_reason\": \"\",\n        \"resolved_source\": \"\",\n        \"installed_on\": \"\",\n        \"appliance_id\": \"\",\n        \"appliance_ip\": \"\",\n        \"appliance_host\": \"\",\n        \"zone\": \"\",\n        \"asset_id\": \"{{vars.input.params.assetId}}\",\n        \"node_label\": \"\",\n        \"node_type\": \"\",\n        \"node_vendor\": \"\",\n        \"node_product_name\": \"\",\n        \"node_firmware_version\": \"\",\n        \"node_os\": \"\",\n        \"resolution_status\": \"\",\n        \"cve_summary\": \"\",\n        \"cve_references\": [\n          {\n            \"name\": \"\",\n            \"reference_type\": \"\",\n            \"source\": \"\",\n            \"url\": \"\"\n          }\n        ],\n        \"cve_score\": \"\",\n        \"cve_creation_time\": \"\",\n        \"cve_update_time\": \"\",\n        \"cve_source\": \"\"\n      }\n    ]\n  }\n}",
+                "operationTitle": "Get Node CVEs",
+                "pickFromTenant": false,
+                "step_variables": {
+                    "cVEIdList": "{{vars.steps.Get_Node_CVEs_By_Vendor.data.result | json_query('[*][\"cve\"][]') }}"
+                }
+            },
+            "status": null,
+            "top": "440",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "b954238f-f5a7-4c5e-8a09-607466540919"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Output",
+            "description": null,
+            "arguments": {
+                "cVEResult": "{{vars.cVE}}"
+            },
+            "status": null,
+            "top": "1110",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "41347a9b-2921-41f3-a229-e7f94278c42b"
         },
         {
             "@type": "WorkflowStep",
@@ -263,33 +272,64 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "By Asset Id Or By Vendor",
+            "name": "Start",
             "description": null,
             "arguments": {
-                "conditions": [
-                    {
-                        "option": "Asset Id",
-                        "step_iri": "\/api\/3\/workflow_steps\/298c99fc-af86-4b21-b43b-1e47362d56fd",
-                        "condition": "{{ vars.input.params.assetId != \"\" }}",
-                        "step_name": "Get Node CVEs By Asset Id"
-                    },
-                    {
-                        "option": "Vendor",
-                        "step_iri": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
-                        "condition": "{{ vars.input.params.vendor != \"\" }}",
-                        "step_name": "Get Node CVEs By Vendor"
+                "step_variables": {
+                    "input": {
+                        "params": []
                     }
-                ]
+                }
             },
             "status": null,
-            "top": "300",
+            "top": "30",
             "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "ee164e0b-7f80-4db4-846b-683d231b8718"
+            "uuid": "d3613a5f-7603-4a9e-9439-130be7c94466"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Vendor Tag On CVEs -> Output",
+            "targetStep": "\/api\/3\/workflow_steps\/41347a9b-2921-41f3-a229-e7f94278c42b",
+            "sourceStep": "\/api\/3\/workflow_steps\/21a4a9a0-e9ba-41c4-a6bf-e797804d8993",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "de370a79-fe34-4ba1-956a-d5b34eac1435"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Is Asset Id Or Vendor Present",
+            "targetStep": "\/api\/3\/workflow_steps\/ee164e0b-7f80-4db4-846b-683d231b8718",
+            "sourceStep": "\/api\/3\/workflow_steps\/9ff67954-f632-49bc-9624-7b837f7352ff",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a3f082c9-8ea4-4b65-9a28-ffa1862d0a07"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Not Found CVEs -> Remove Special Character",
+            "targetStep": "\/api\/3\/workflow_steps\/d9ad4180-b7b7-443d-b935-4941720937c5",
+            "sourceStep": "\/api\/3\/workflow_steps\/cda2e242-7e07-44e5-87e3-056318be958a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "81fda3af-53d3-4fe0-8ff2-c728f4c8aab2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Find CVEs Record -> Create Not Found CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/cda2e242-7e07-44e5-87e3-056318be958a",
+            "sourceStep": "\/api\/3\/workflow_steps\/cc5bd88b-45ea-41b1-aba3-04cc0d1aec7a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e8934d72-7490-495d-859a-1b8a642a42e5"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Get Node CVEs By Asset Id -> Find CVEs Record",
@@ -297,6 +337,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/298c99fc-af86-4b21-b43b-1e47362d56fd",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "0d5a26b9-afbc-40d6-af2a-a418e265bb3f"
         },
         {
@@ -306,43 +347,8 @@
             "sourceStep": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "3034c80c-e3da-44dd-8421-88738a22f1eb"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Asset Id Or Vendor Present -> Get Node CVEs",
-            "targetStep": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
-            "sourceStep": "\/api\/3\/workflow_steps\/ee164e0b-7f80-4db4-846b-683d231b8718",
-            "label": "Vendor",
-            "isExecuted": false,
-            "uuid": "713cc41f-c710-4643-a3dc-692ebcb5a6b3"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Create Not Found CVEs -> Remove Special Character",
-            "targetStep": "\/api\/3\/workflow_steps\/d9ad4180-b7b7-443d-b935-4941720937c5",
-            "sourceStep": "\/api\/3\/workflow_steps\/cda2e242-7e07-44e5-87e3-056318be958a",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "81fda3af-53d3-4fe0-8ff2-c728f4c8aab2"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Configuration -> Is Asset Id Or Vendor Present",
-            "targetStep": "\/api\/3\/workflow_steps\/ee164e0b-7f80-4db4-846b-683d231b8718",
-            "sourceStep": "\/api\/3\/workflow_steps\/9ff67954-f632-49bc-9624-7b837f7352ff",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "a3f082c9-8ea4-4b65-9a28-ffa1862d0a07"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/9ff67954-f632-49bc-9624-7b837f7352ff",
-            "sourceStep": "\/api\/3\/workflow_steps\/d3613a5f-7603-4a9e-9439-130be7c94466",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "befac4db-46f2-443d-9f86-778906015f37"
         },
         {
             "@type": "WorkflowRoute",
@@ -351,7 +357,18 @@
             "sourceStep": "\/api\/3\/workflow_steps\/ee164e0b-7f80-4db4-846b-683d231b8718",
             "label": "Asset Id",
             "isExecuted": false,
+            "group": null,
             "uuid": "c9d06bff-6f96-4475-b924-d9b7c1b438a3"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Asset Id Or Vendor Present -> Get Node CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/b954238f-f5a7-4c5e-8a09-607466540919",
+            "sourceStep": "\/api\/3\/workflow_steps\/ee164e0b-7f80-4db4-846b-683d231b8718",
+            "label": "Vendor",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "713cc41f-c710-4643-a3dc-692ebcb5a6b3"
         },
         {
             "@type": "WorkflowRoute",
@@ -360,25 +377,18 @@
             "sourceStep": "\/api\/3\/workflow_steps\/d9ad4180-b7b7-443d-b935-4941720937c5",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "ca8440f8-bdc6-4015-b86b-023106ff6aa7"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Add Vendor Tag On CVEs -> Output",
-            "targetStep": "\/api\/3\/workflow_steps\/41347a9b-2921-41f3-a229-e7f94278c42b",
-            "sourceStep": "\/api\/3\/workflow_steps\/21a4a9a0-e9ba-41c4-a6bf-e797804d8993",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/9ff67954-f632-49bc-9624-7b837f7352ff",
+            "sourceStep": "\/api\/3\/workflow_steps\/d3613a5f-7603-4a9e-9439-130be7c94466",
             "label": null,
             "isExecuted": false,
-            "uuid": "de370a79-fe34-4ba1-956a-d5b34eac1435"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Find CVEs Record -> Create Not Found CVEs",
-            "targetStep": "\/api\/3\/workflow_steps\/cda2e242-7e07-44e5-87e3-056318be958a",
-            "sourceStep": "\/api\/3\/workflow_steps\/cc5bd88b-45ea-41b1-aba3-04cc0d1aec7a",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "e8934d72-7490-495d-859a-1b8a642a42e5"
+            "group": null,
+            "uuid": "befac4db-46f2-443d-9f86-778906015f37"
         }
     ],
     "groups": [],
@@ -389,6 +399,7 @@
     "deletedAt": null,
     "recordTags": [
         "Assets",
+        "Referenced",
         "CVE",
         "Nozomi"
     ]

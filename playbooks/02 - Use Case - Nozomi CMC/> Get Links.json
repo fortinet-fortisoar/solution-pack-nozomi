@@ -4,7 +4,7 @@
     "name": "> Get Links",
     "aliasName": null,
     "tag": null,
-    "description": "Playbook get links from Nozomi on the basis of Alert's Source IP and Destination IP.",
+    "description": "Playbook get links from Nozomi CMC on the basis of Alert's Source IP and Destination IP.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -19,25 +19,115 @@
     "steps": [
         {
             "@type": "WorkflowStep",
-            "name": "Summary For Alert",
+            "name": "Add Comment On Alert",
             "description": null,
             "arguments": {
                 "when": "{{vars.linkList | flatten | length > 0}}",
-                "params": {
-                    "value": "<p>Recent network activity fetched from Nozomi as an Event for Alert's Source IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['sourceIp']}}<\/span> and Destination IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['destinationIp']}}<\/span><\/p><hr>\n<table>\n<tbody>\n<tr>\n<th>Communication From<\/th>\n<th>Communication To<\/th>\n<th>Event ID<\/th>\n<\/tr>\n{% for data in vars.eventResult %}\n<tr>\n<td >{{data.from}}<\/td>\n<td >{{data.to}}<\/td>\n<td align=\"center\"><a href=\"\/modules\/events\/{{data.eventUuid}}\" target=\"_blank\" rel=\"noopener\">{{data.id}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n<\/tbody>\n<\/table>\n\n"
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "alerts": "{{vars.input.params.alertData['@id']}}",
+                    "people": [],
+                    "content": "<p>{{vars.steps.Summary_For_Alert.data['formatted_string']}}<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
                 },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "format_richtext",
-                "operationTitle": "Utils: Format as RichText (Markdown)",
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
                 "step_variables": []
             },
             "status": null,
-            "top": "705",
+            "top": "840",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "0495f561-88cf-4aed-b924-45f1a4ccc04e"
+            "uuid": "bc091bac-0d0b-46db-8073-6bf7bcb748f2"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "linkList": "[]",
+                "sourceData": "{{vars.input.params.alertData['sourcedata'] | toDict}}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "99459c6b-e4ee-4f41-82e5-04ab453db048"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Event",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.linkList | flatten | length > 0}}",
+                "for_each": {
+                    "item": "{{vars.linkList | flatten}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "name": "Communication from {{vars.item.from}} to {{vars.item.to}}",
+                    "alerts": "{{vars.input.params.alertData['@id']}}",
+                    "source": "Nozomi Networks Central Management Console",
+                    "sourceId": "{{vars.sourceData['id']}}",
+                    "__replace": "",
+                    "recordTags": "{{vars.item.from, vars.item.to}}",
+                    "description": "<table>\n<tbody>\n<tr>\n<th> From <\/th>\n<td> {{vars.item.from}}\n<\/tr>\n<tr>\n<th> To <\/th>\n<td> {{vars.item.to}}\n<\/tr>\n<tr>\n<th> Is From Public <\/th>\n<td> {{vars.item.is_from_public}}\n<\/tr>\n<tr>\n<th> Is To Public <\/th>\n<td> {{vars.item.is_to_public}}\n<\/tr>\n<tr>\n<th> Protocol <\/th>\n<td> {{vars.item.protocol}}\n<\/tr>\n<tr>\n<th> From Zone <\/th>\n<td> {{vars.item.from_zone}}\n<\/tr>\n<tr>\n<th> To Zone <\/th>\n<td> {{vars.item.to_zone}}\n<\/tr>\n<tr>\n<th> First Activity Time <\/th>\n<td> {{arrow.get(vars.item.first_activity_time | int).format(\"YYYY-MM-DD HH:mm:ss\")}}\n<\/tr>\n<tr>\n<th> Last Activity Time <\/th>\n<td> {{arrow.get(vars.item.last_activity_time | int).format(\"YYYY-MM-DD HH:mm:ss\")}}\n<\/tr>\n<\/tbody>\n<\/table>"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/events",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": {
+                    "eventResult": "{% set result = [] %}{% for data in vars.linkList | flatten %}\n{% set output = vars.steps.Create_Event | json_query(\"[?contains(recordTags, '\"+data.to+\"') && contains(recordTags, '\"+data.from+\"')]\") %}\n{% set _ = result.append({\"id\":output[0][\"id\"],\"from\":data.from,\"to\":data.to,\"eventUuid\":output[0][\"uuid\"]}) %}{% endfor %}{{result}}"
+                }
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "7f0e7bd0-46b1-43c4-9d25-1bdbe10161ee"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get links For DestinationIP",
+            "description": null,
+            "arguments": {
+                "name": "Nozomi Networks Central Management Console",
+                "config": "b517d037-d1e1-46fb-9cdc-bcc20b374cbf",
+                "params": {
+                    "query": "| where appliance_host == {{vars.sourceData['appliance_host']}} | where from == {{vars.input.params.alertData['destinationIp']}} OR to == {{vars.input.params.alertData['destinationIp']}}"
+                },
+                "version": "1.0.0",
+                "connector": "nozomi-networks-central-management-console",
+                "operation": "get_links",
+                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"10.132.254.178\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"10.132.0.0\/16\",\n        \"bpf_filter\": \"ip host 10.132.254.178 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"4193\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1679266776616\",\n        \"first_activity_time\": \"1672296600960\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"67\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"0\",\n        \"transferred.last_30m_bytes\": \"0\",\n        \"transferred.avg_packet_bytes\": 62.58208955223881,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"75\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"62\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      },\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"10.132.254.233\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"10.132.0.0\/16\",\n        \"bpf_filter\": \"ip host 10.132.254.233 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"30907\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1679567519032\",\n        \"first_activity_time\": \"1675778814161\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"386\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"300\",\n        \"transferred.last_30m_bytes\": \"300\",\n        \"transferred.avg_packet_bytes\": 80.06994818652849,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"94\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"75\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      },\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"169.254.12.92\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"169.254.0.0\/16\",\n        \"bpf_filter\": \"ip host 169.254.12.92 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"69\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1672290565876\",\n        \"first_activity_time\": \"1672290565876\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"1\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"0\",\n        \"transferred.last_30m_bytes\": \"0\",\n        \"transferred.avg_packet_bytes\": 69,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"69\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"69\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      }\n    ]\n  }\n}",
+                "operationTitle": "Get Links",
+                "pickFromTenant": false,
+                "step_variables": {
+                    "__dummy": "{{vars.linkList.append(vars.steps.Get_links_For_DestinationIP.data.result)}}"
+                }
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "402a4d15-3bb1-4f66-a345-1d8227c095f0"
         },
         {
             "@type": "WorkflowStep",
@@ -86,118 +176,38 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get links For DestinationIP",
+            "name": "Summary For Alert",
             "description": null,
             "arguments": {
-                "name": "Nozomi Networks Central Management Console",
-                "config": "b517d037-d1e1-46fb-9cdc-bcc20b374cbf",
+                "when": "{{vars.linkList | flatten | length > 0}}",
                 "params": {
-                    "query": "| where appliance_host == {{vars.sourceData['appliance_host']}} | where from == {{vars.input.params.alertData['destinationIp']}} OR to == {{vars.input.params.alertData['destinationIp']}}"
+                    "value": "<p>Recent network activity fetched from Nozomi as an Event for Alert's Source IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['sourceIp']}}<\/span> and Destination IP <span class=\"badge badge-pill badge-danger\" style=\"background: #ba6204; color: #fff;\">{{vars.input.params.alertData['destinationIp']}}<\/span><\/p><hr>\n<table>\n<tbody>\n<tr>\n<th>Communication From<\/th>\n<th>Communication To<\/th>\n<th>Event ID<\/th>\n<\/tr>\n{% for data in vars.eventResult %}\n<tr>\n<td >{{data.from}}<\/td>\n<td >{{data.to}}<\/td>\n<td align=\"center\"><a href=\"\/modules\/events\/{{data.eventUuid}}\" target=\"_blank\" rel=\"noopener\">{{data.id}}<\/a><\/td>\n<\/tr>\n{% endfor %}\n<\/tbody>\n<\/table>\n\n"
                 },
-                "version": "1.0.0",
-                "connector": "nozomi-networks-central-management-console",
-                "operation": "get_links",
-                "mock_result": "{\n  \"data\": {\n    \"result\": [\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"10.132.254.178\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"10.132.0.0\/16\",\n        \"bpf_filter\": \"ip host 10.132.254.178 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"4193\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1679266776616\",\n        \"first_activity_time\": \"1672296600960\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"67\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"0\",\n        \"transferred.last_30m_bytes\": \"0\",\n        \"transferred.avg_packet_bytes\": 62.58208955223881,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"75\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"62\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      },\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"10.132.254.233\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"10.132.0.0\/16\",\n        \"bpf_filter\": \"ip host 10.132.254.233 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"30907\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1679567519032\",\n        \"first_activity_time\": \"1675778814161\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"386\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"300\",\n        \"transferred.last_30m_bytes\": \"300\",\n        \"transferred.avg_packet_bytes\": 80.06994818652849,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"94\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"75\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      },\n      {\n        \"to\": \"{{vars.input.params.alertData['destinationIp']}}\",\n        \"_can\": {\n          \"link_events\": true,\n          \"captured_urls\": true,\n          \"trace_requests\": true\n        },\n        \"from\": \"169.254.12.92\",\n        \"_ports\": [\n          {\n            \"udp\": \"5355\"\n          }\n        ],\n        \"alerts\": \"0\",\n        \"_checks\": {},\n        \"to_zone\": \"Multicast\",\n        \"protocol\": \"llmnr\",\n        \"to_ports\": [],\n        \"from_zone\": \"169.254.0.0\/16\",\n        \"bpf_filter\": \"ip host 169.254.12.92 and ip host {{vars.input.params.alertData['destinationIp']}} and (udp port 5355)\",\n        \"from_ports\": [],\n        \"is_learned\": true,\n        \"is_broadcast\": true,\n        \"is_to_public\": false,\n        \"active_checks\": [],\n        \"appliance_host\": \"{{vars.sourceData['appliance_host']}}\",\n        \"appliance_site\": null,\n        \"function_codes\": [],\n        \"is_from_public\": false,\n        \"is_fully_learned\": true,\n        \"throughput_speed\": 0,\n        \"transferred.bytes\": \"69\",\n        \"has_confirmed_data\": false,\n        \"last_activity_time\": \"1672290565876\",\n        \"first_activity_time\": \"1672290565876\",\n        \"last_handshake_time\": \"0\",\n        \"transferred.packets\": \"1\",\n        \"transport_protocols\": [\n          \"udp\"\n        ],\n        \"last_trace_request_time\": \"0\",\n        \"tcp_retransmission.bytes\": \"0\",\n        \"transferred.last_1d_bytes\": \"0\",\n        \"transferred.last_1h_bytes\": \"0\",\n        \"transferred.last_1w_bytes\": \"0\",\n        \"transferred.last_5m_bytes\": \"0\",\n        \"tcp_retransmission.packets\": \"0\",\n        \"tcp_retransmission.percent\": 0,\n        \"transferred.last_15m_bytes\": \"0\",\n        \"transferred.last_30m_bytes\": \"0\",\n        \"transferred.avg_packet_bytes\": 69,\n        \"tcp_connection_attempts.total\": \"0\",\n        \"tcp_connection_attempts.last_5m\": \"0\",\n        \"tcp_connection_attempts.last_15m\": \"0\",\n        \"tcp_connection_attempts.last_30m\": \"0\",\n        \"tcp_handshaked_connections.total\": \"0\",\n        \"tcp_retransmission.last_5m_bytes\": \"0\",\n        \"transferred.biggest_packet_bytes\": \"69\",\n        \"tcp_retransmission.last_15m_bytes\": \"0\",\n        \"tcp_retransmission.last_30m_bytes\": \"0\",\n        \"transferred.smallest_packet_bytes\": \"69\",\n        \"tcp_handshaked_connections.last_5m\": \"0\",\n        \"tcp_handshaked_connections.last_15m\": \"0\",\n        \"tcp_handshaked_connections.last_30m\": \"0\"\n      }\n    ]\n  }\n}",
-                "operationTitle": "Get Links",
-                "pickFromTenant": false,
-                "step_variables": {
-                    "__dummy": "{{vars.linkList.append(vars.steps.Get_links_For_DestinationIP.data.result)}}"
-                }
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
-            "group": null,
-            "uuid": "402a4d15-3bb1-4f66-a345-1d8227c095f0"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Create Event",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.linkList | flatten | length > 0}}",
-                "for_each": {
-                    "item": "{{vars.linkList | flatten}}",
-                    "__bulk": true,
-                    "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
-                },
-                "resource": {
-                    "name": "Communication from {{vars.item.from}} to {{vars.item.to}}",
-                    "alerts": "{{vars.input.params.alertData['@id']}}",
-                    "source": "Nozomi Networks Central Management Console",
-                    "sourceId": "{{vars.sourceData['id']}}",
-                    "__replace": "",
-                    "recordTags": "{{vars.item.from, vars.item.to}}",
-                    "description": "<table>\n<tbody>\n<tr>\n<th> From <\/th>\n<td> {{vars.item.from}}\n<\/tr>\n<tr>\n<th> To <\/th>\n<td> {{vars.item.to}}\n<\/tr>\n<tr>\n<th> Is From Public <\/th>\n<td> {{vars.item.is_from_public}}\n<\/tr>\n<tr>\n<th> Is To Public <\/th>\n<td> {{vars.item.is_to_public}}\n<\/tr>\n<tr>\n<th> Protocol <\/th>\n<td> {{vars.item.protocol}}\n<\/tr>\n<tr>\n<th> From Zone <\/th>\n<td> {{vars.item.from_zone}}\n<\/tr>\n<tr>\n<th> To Zone <\/th>\n<td> {{vars.item.to_zone}}\n<\/tr>\n<tr>\n<th> First Activity Time <\/th>\n<td> {{arrow.get(vars.item.first_activity_time | int).format(\"YYYY-MM-DD HH:mm:ss\")}}\n<\/tr>\n<tr>\n<th> Last Activity Time <\/th>\n<td> {{arrow.get(vars.item.last_activity_time | int).format(\"YYYY-MM-DD HH:mm:ss\")}}\n<\/tr>\n<\/tbody>\n<\/table>"
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/events",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": {
-                    "eventResult": "{% set result = [] %}{% for data in vars.linkList | flatten %}\n{% set output = vars.steps.Create_Event | json_query(\"[?contains(recordTags, '\"+data.to+\"') && contains(recordTags, '\"+data.from+\"')]\") %}\n{% set _ = result.append({\"id\":output[0][\"id\"],\"from\":data.from,\"to\":data.to,\"eventUuid\":output[0][\"uuid\"]}) %}{% endfor %}{{result}}"
-                }
-            },
-            "status": null,
-            "top": "570",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "7f0e7bd0-46b1-43c4-9d25-1bdbe10161ee"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Configuration",
-            "description": null,
-            "arguments": {
-                "linkList": "[]",
-                "sourceData": "{{vars.input.params.alertData['sourcedata'] | toDict}}",
-                "useMockOutput": "{{globalVars.Demo_mode}}"
-            },
-            "status": null,
-            "top": "165",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "99459c6b-e4ee-4f41-82e5-04ab453db048"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Add Comment On Alert",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.linkList | flatten | length > 0}}",
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "alerts": "{{vars.input.params.alertData['@id']}}",
-                    "people": [],
-                    "content": "<p>{{vars.steps.Summary_For_Alert.data['formatted_string']}}<\/p>",
-                    "__replace": "",
-                    "isImportant": false,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText (Markdown)",
                 "step_variables": []
             },
             "status": null,
-            "top": "840",
+            "top": "705",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "bc091bac-0d0b-46db-8073-6bf7bcb748f2"
+            "uuid": "0495f561-88cf-4aed-b924-45f1a4ccc04e"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get links",
+            "targetStep": "\/api\/3\/workflow_steps\/24dcf7ad-9e94-46ac-b216-295886f2a7b7",
+            "sourceStep": "\/api\/3\/workflow_steps\/99459c6b-e4ee-4f41-82e5-04ab453db048",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "dcbc6731-5d0e-4990-8091-a22135f1be2b"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Create Event -> Summary For Alert",
@@ -205,6 +215,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/7f0e7bd0-46b1-43c4-9d25-1bdbe10161ee",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "166d8aa5-0d5b-407f-a410-8ce8c67a86f4"
         },
         {
@@ -214,6 +225,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/402a4d15-3bb1-4f66-a345-1d8227c095f0",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "1f076295-8b20-411b-9e49-868c7bc274a9"
         },
         {
@@ -223,6 +235,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/24dcf7ad-9e94-46ac-b216-295886f2a7b7",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "555e4cef-0c3e-4e5a-893c-0ad0098e318f"
         },
         {
@@ -232,16 +245,8 @@
             "sourceStep": "\/api\/3\/workflow_steps\/401222b9-978b-40d8-bc8b-aefffd84e158",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "98a38de9-06c7-4dc3-bb88-75770dfa7db3"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Configuration -> Get links",
-            "targetStep": "\/api\/3\/workflow_steps\/24dcf7ad-9e94-46ac-b216-295886f2a7b7",
-            "sourceStep": "\/api\/3\/workflow_steps\/99459c6b-e4ee-4f41-82e5-04ab453db048",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "dcbc6731-5d0e-4990-8091-a22135f1be2b"
         },
         {
             "@type": "WorkflowRoute",
@@ -250,6 +255,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/0495f561-88cf-4aed-b924-45f1a4ccc04e",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "eaf2897f-34c0-454e-847a-5873c0065b5d"
         }
     ],

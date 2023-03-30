@@ -306,84 +306,13 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Get Appliance Detail -> Add Comment On Asset",
-            "targetStep": "\/api\/3\/workflow_steps\/f8a4e95c-716f-4d43-a6f5-21ec570f8f04",
-            "sourceStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "03a76904-90fb-4e61-bd77-09fbe887c96e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/29af7ab4-b6c5-4a34-9e3a-d28ff9a82dc7",
-            "sourceStep": "\/api\/3\/workflow_steps\/4d7be579-9691-4916-b61d-98944ffcd9a5",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "3a78ccf8-7da1-40b4-ada3-46db20f6f07f"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Update Asset With CVEs ICS Advisory and KEV Alert -> Output",
-            "targetStep": "\/api\/3\/workflow_steps\/587b309d-79b6-4b04-9bbf-9934fca4574e",
-            "sourceStep": "\/api\/3\/workflow_steps\/20ea7210-fca9-4884-a10e-d3849b1a724d",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "4c409940-1b90-44b3-b318-32e9695185ef"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Values -> Create",
-            "targetStep": "\/api\/3\/workflow_steps\/31bcac9c-4d17-4e7e-b2ac-cc9b305462fd",
-            "sourceStep": "\/api\/3\/workflow_steps\/5a6a9c15-06e0-4d4b-89be-3c7b282336a4",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "59082d8b-354f-4673-b1ba-f98014b267f9"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Add Comment On Asset -> Get CVEs By Asset Id",
             "targetStep": "\/api\/3\/workflow_steps\/a1ed82ab-1abf-4068-ba7b-453efe37caa9",
             "sourceStep": "\/api\/3\/workflow_steps\/f8a4e95c-716f-4d43-a6f5-21ec570f8f04",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "6025fd74-e194-42fc-a034-00b8a5954997"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Correlated Record Of CVEs -> Summary For Assets",
-            "targetStep": "\/api\/3\/workflow_steps\/b8d7b015-a0b0-4508-b9c5-08c018237944",
-            "sourceStep": "\/api\/3\/workflow_steps\/cdcc4ede-4938-43ef-9921-a79cf54a9109",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "69ea5632-6965-4d69-bfbf-cdc49efbee62"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Summary For Assets -> Update Asset With CVEs ICS Advisory and KEV Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/20ea7210-fca9-4884-a10e-d3849b1a724d",
-            "sourceStep": "\/api\/3\/workflow_steps\/b8d7b015-a0b0-4508-b9c5-08c018237944",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "a6df1eeb-f627-46e0-af5c-a75ce524a7cf"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Create Assets -> Get Appliance Detail",
-            "targetStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
-            "sourceStep": "\/api\/3\/workflow_steps\/31bcac9c-4d17-4e7e-b2ac-cc9b305462fd",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "bb780124-b37c-4a87-95a8-08c87ebbb4f0"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get CVEs By Asset Id -> Get Correlated Record",
-            "targetStep": "\/api\/3\/workflow_steps\/cdcc4ede-4938-43ef-9921-a79cf54a9109",
-            "sourceStep": "\/api\/3\/workflow_steps\/a1ed82ab-1abf-4068-ba7b-453efe37caa9",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "e914b0d1-d250-4dc7-909c-3a1e6308c0eb"
         },
         {
             "@type": "WorkflowRoute",
@@ -392,7 +321,88 @@
             "sourceStep": "\/api\/3\/workflow_steps\/29af7ab4-b6c5-4a34-9e3a-d28ff9a82dc7",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "fe710326-fd63-40d3-8685-48166b7e2ff3"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Assets -> Get Appliance Detail",
+            "targetStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
+            "sourceStep": "\/api\/3\/workflow_steps\/31bcac9c-4d17-4e7e-b2ac-cc9b305462fd",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "bb780124-b37c-4a87-95a8-08c87ebbb4f0"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Appliance Detail -> Add Comment On Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/f8a4e95c-716f-4d43-a6f5-21ec570f8f04",
+            "sourceStep": "\/api\/3\/workflow_steps\/c3facca9-42ac-4882-9dec-6d657507a55d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "03a76904-90fb-4e61-bd77-09fbe887c96e"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Correlated Record Of CVEs -> Summary For Assets",
+            "targetStep": "\/api\/3\/workflow_steps\/b8d7b015-a0b0-4508-b9c5-08c018237944",
+            "sourceStep": "\/api\/3\/workflow_steps\/cdcc4ede-4938-43ef-9921-a79cf54a9109",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "69ea5632-6965-4d69-bfbf-cdc49efbee62"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get CVEs By Asset Id -> Get Correlated Record",
+            "targetStep": "\/api\/3\/workflow_steps\/cdcc4ede-4938-43ef-9921-a79cf54a9109",
+            "sourceStep": "\/api\/3\/workflow_steps\/a1ed82ab-1abf-4068-ba7b-453efe37caa9",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e914b0d1-d250-4dc7-909c-3a1e6308c0eb"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Values -> Create",
+            "targetStep": "\/api\/3\/workflow_steps\/31bcac9c-4d17-4e7e-b2ac-cc9b305462fd",
+            "sourceStep": "\/api\/3\/workflow_steps\/5a6a9c15-06e0-4d4b-89be-3c7b282336a4",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "59082d8b-354f-4673-b1ba-f98014b267f9"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/29af7ab4-b6c5-4a34-9e3a-d28ff9a82dc7",
+            "sourceStep": "\/api\/3\/workflow_steps\/4d7be579-9691-4916-b61d-98944ffcd9a5",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "3a78ccf8-7da1-40b4-ada3-46db20f6f07f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Summary For Assets -> Update Asset With CVEs ICS Advisory and KEV Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/20ea7210-fca9-4884-a10e-d3849b1a724d",
+            "sourceStep": "\/api\/3\/workflow_steps\/b8d7b015-a0b0-4508-b9c5-08c018237944",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a6df1eeb-f627-46e0-af5c-a75ce524a7cf"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Asset With CVEs ICS Advisory and KEV Alert -> Output",
+            "targetStep": "\/api\/3\/workflow_steps\/587b309d-79b6-4b04-9bbf-9934fca4574e",
+            "sourceStep": "\/api\/3\/workflow_steps\/20ea7210-fca9-4884-a10e-d3849b1a724d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "4c409940-1b90-44b3-b318-32e9695185ef"
         }
     ],
     "groups": [],
@@ -403,8 +413,8 @@
     "deletedAt": null,
     "recordTags": [
         "Alert",
-        "Referenced",
         "Assets",
+        "Referenced",
         "KEV",
         "CVE",
         "Nozomi",

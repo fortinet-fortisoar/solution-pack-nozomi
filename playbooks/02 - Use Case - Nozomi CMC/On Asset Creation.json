@@ -4,7 +4,7 @@
     "name": "On Asset Creation",
     "aliasName": null,
     "tag": null,
-    "description": "On Asset Creation (from Nozomi) link it to existing KEV Alert (if any for same vendor).",
+    "description": "On Asset Creation (source Nozomi CMC) link it to existing KEV Alert (if any for same vendor).",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -15,6 +15,36 @@
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/460300eb-79e1-4d8a-8963-75e4eccdfa98",
     "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "assets": "{{vars.record[\"@id\"]}}",
+                    "people": [],
+                    "content": "<p>KEV Alert for Asset vendor: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<p>{% if vars.kEVAlertIRI | length &gt; 0 %}<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{(item | fromIRI).title}} <\/a><br \/>{% endfor %}<\/p>\n<p>{% endif %}<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "b8ad6c76-96fc-4ccb-93ae-83caf52a807b"
+        },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
@@ -28,6 +58,44 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "0ae118b4-4f4c-488b-96f7-c694860302dc"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get CVEs By Vendor",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "array",
+                            "field": "recordTags",
+                            "value": "{{vars.record.vendor}}",
+                            "_value": "{{vars.record.vendor}}",
+                            "operator": "in"
+                        }
+                    ],
+                    "__selectFields": [
+                        "kEVAlerts",
+                        "iCSAdvisories"
+                    ]
+                },
+                "module": "c_v_es?$limit=5000&$relationships=true&$fsr_max_relation_count=5000",
+                "checkboxFields": true,
+                "step_variables": {
+                    "cVEIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"@id\"][]') | unique }}",
+                    "kEVAlertIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"kEVAlerts\"][][][\"@id\"][]') | unique}}",
+                    "iCSAdvisoryIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"iCSAdvisories\"][][][\"@id\"][]') | unique}}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "b061f2a4-cdab-46db-97a2-3114cd33d629"
         },
         {
             "@type": "WorkflowStep",
@@ -103,74 +171,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "4a3b2798-ea48-44c4-b4de-5606dcecaeac"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get CVEs By Vendor",
-            "description": null,
-            "arguments": {
-                "query": {
-                    "sort": [],
-                    "limit": 30,
-                    "logic": "AND",
-                    "filters": [
-                        {
-                            "type": "array",
-                            "field": "recordTags",
-                            "value": "{{vars.record.vendor}}",
-                            "_value": "{{vars.record.vendor}}",
-                            "operator": "in"
-                        }
-                    ],
-                    "__selectFields": [
-                        "kEVAlerts",
-                        "iCSAdvisories"
-                    ]
-                },
-                "module": "c_v_es?$limit=5000&$relationships=true&$fsr_max_relation_count=5000",
-                "checkboxFields": true,
-                "step_variables": {
-                    "cVEIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"@id\"][]') | unique }}",
-                    "kEVAlertIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"kEVAlerts\"][][][\"@id\"][]') | unique}}",
-                    "iCSAdvisoryIRI": "{{vars.steps.Get_CVEs_By_Vendor | json_query('[*][\"iCSAdvisories\"][][][\"@id\"][]') | unique}}"
-                }
-            },
-            "status": null,
-            "top": "300",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
-            "group": null,
-            "uuid": "b061f2a4-cdab-46db-97a2-3114cd33d629"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Add Comment",
-            "description": null,
-            "arguments": {
-                "when": "{{vars.steps.Get_CVEs_By_Vendor | length > 0}}",
-                "resource": {
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "assets": "{{vars.record[\"@id\"]}}",
-                    "people": [],
-                    "content": "<p>KEV Alert for Asset vendor: <span class=\"badge badge-pill badge-danger\" style=\"background: #009d00; color: #fff;\">{{vars.record.vendor}}<\/span> has been found. So correlated this asset with KEV Alert, ICS Advisories and CVEs.<\/p>\n<p>{% if vars.kEVAlertIRI | length &gt; 0 %}<\/p>\n<h4>KEV Alert<\/h4>\n<p>{% for item in vars.kEVAlertIRI %} {{loop.index}}: <a href=\"\/modules\/k_e_v_alerts\/{{item.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{(item | fromIRI).title}} <\/a><br \/>{% endfor %}<\/p>\n<p>{% endif %}<\/p>",
-                    "__replace": "",
-                    "isImportant": false,
-                    "peopleUpdated": false
-                },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/comments",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": []
-            },
-            "status": null,
-            "top": "570",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
-            "group": null,
-            "uuid": "b8ad6c76-96fc-4ccb-93ae-83caf52a807b"
         }
     ],
     "routes": [
@@ -181,6 +181,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/0ae118b4-4f4c-488b-96f7-c694860302dc",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "0e68bbd4-ba7e-4029-8478-359fb7f03bea"
         },
         {
@@ -190,6 +191,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/b061f2a4-cdab-46db-97a2-3114cd33d629",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "5a8b84f7-3b3a-45fe-b4ee-187359eacfa0"
         },
         {
@@ -199,6 +201,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/460300eb-79e1-4d8a-8963-75e4eccdfa98",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "5b490e1f-588f-43c8-b525-554d25315717"
         },
         {
@@ -208,6 +211,7 @@
             "sourceStep": "\/api\/3\/workflow_steps\/4a3b2798-ea48-44c4-b4de-5606dcecaeac",
             "label": null,
             "isExecuted": false,
+            "group": null,
             "uuid": "bd8131aa-ebb5-46b5-815e-c93e8a4855ce"
         }
     ],
