@@ -1,7 +1,7 @@
 {
     "name": "nozomiNetworksCentralManagementConsole",
     "version": "1.0.0",
-    "fsrMinCompatibility": "7.2.0",
+    "fsrMinCompatibility": "7.2.2",
     "type": "solutionpack",
     "local": true,
     "label": "Nozomi Networks Central Management Console",
@@ -45,7 +45,7 @@
     "supportInfo": null,
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-29T10:02:34+00:00",
+    "date": "2023-03-30T09:08:01+00:00",
     "contents": {
         "playbooks": [
             {
@@ -55,8 +55,8 @@
         "globalVariables": [],
         "connectors": [
             {
-                "name": "Code Snippet",
-                "apiName": "code-snippet"
+                "name": "ServiceNow",
+                "apiName": "servicenow"
             },
             {
                 "name": "File Content Extraction",
@@ -69,10 +69,6 @@
             {
                 "name": "Fortinet FortiEDR",
                 "apiName": "fortinet-fortiedr"
-            },
-            {
-                "name": "Fortinet FortiGate",
-                "apiName": "fortigate-firewall"
             },
             {
                 "name": "Nozomi Networks Central Management Console",

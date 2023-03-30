@@ -1,16 +1,5 @@
 [
     {
-        "name": "code-snippet",
-        "label": "Code Snippet",
-        "category": "utilities",
-        "description": "Execute code snippets as part of your Playbooks",
-        "publisher": null,
-        "operation_roles": [],
-        "configurations": [],
-        "dataImports": [],
-        "install_mode": "rpm"
-    },
-    {
         "name": "file-content-extraction",
         "label": "File Content Extraction",
         "category": "utilities",
@@ -44,10 +33,10 @@
         "install_mode": "rpm"
     },
     {
-        "name": "fortigate-firewall",
-        "label": "Fortinet FortiGate",
-        "category": "Firewall and Network Protection",
-        "description": "Fortinet FortiGate enterprise firewall provide high performance, consolidated advanced security and granular visibility for broad protection across the entire digital attack surface.",
+        "name": "nozomi-networks-central-management-console",
+        "label": "Nozomi Networks Central Management Console",
+        "category": "OT & IoT Security",
+        "description": "The Nozomi Networks Central Management Console (CMC) consolidates OT and IoT risk monitoring and visibility from Guardian physical or virtual appliances across all of your distributed sites. It integrates with your IT security infrastructure for streamlined workflows and faster response to threats and anomalies.",
         "publisher": null,
         "operation_roles": [],
         "configurations": [],
@@ -55,10 +44,10 @@
         "install_mode": "rpm"
     },
     {
-        "name": "nozomi-networks-central-management-console",
-        "label": "Nozomi Networks Central Management Console",
-        "category": "OT & IoT Security",
-        "description": "The Nozomi Networks Central Management Console (CMC) consolidates OT and IoT risk monitoring and visibility from Guardian physical or virtual appliances across all of your distributed sites. It integrates with your IT security infrastructure for streamlined workflows and faster response to threats and anomalies.",
+        "name": "servicenow",
+        "label": "ServiceNow",
+        "category": "CMDB",
+        "description": "ServiceNow connector provides functionality to create, read, update and delete records of Table and Catalog type",
         "publisher": null,
         "operation_roles": [],
         "configurations": [],

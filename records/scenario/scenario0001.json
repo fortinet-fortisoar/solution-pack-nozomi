@@ -20,19 +20,19 @@
         "uuid": "7a5a0534-6427-4f77-9f5a-52c7163091f3",
         "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
         "createDate": 1679998077.728555,
-        "modifyUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
-        "modifyDate": 1680084129.443615,
+        "modifyUser": "\/api\/3\/appliances\/57545210-2adc-472b-a24f-2df6ee8dfe63",
+        "modifyDate": 1680166818.01229,
         "id": 10,
         "recordTags": [
             "Alert",
+            "Asset",
+            "CVE",
+            "Events",
             "ICS - Advisory",
             "KEV",
-            "CVE",
-            "Nozomi",
-            "Nodes",
-            "Events",
             "Links",
-            "Asset"
+            "Nodes",
+            "Nozomi"
         ]
     }
 ]
