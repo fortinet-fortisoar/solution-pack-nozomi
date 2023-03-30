@@ -27,22 +27,6 @@ The **Nozomi Networks Central Management Console** solution pack contains the fo
 
 |Playbook Name|Description|
 | :- | :- |
-| Scenario - OT - Asset Change Activity | Generate an Asset Change Activity record for type Add New Asset and Medium Impact Baseline Change. |
-| Medium Impact Baseline Change | Baseline Change Workflow for Medium Impact Cyber Assets |
-| High Impact Baseline Change | Baseline Change Workflow for High Impact Cyber Assets |
-| Add Cyber Asset | Baseline Change Workflow for Add Cyber Asset |
-| Remove Cyber Asset | Baseline Change Workflow for Remove Cyber Asset |
-| Replace Cyber Asset | Baseline Change Workflow for Replace Cyber Assets |
-| Modify Cyber Asset | Baseline Change Workflow for Modify Cyber Asset |
-| Add New Task | New task for Asset Change Activity |
-| Manage Asset Change Activity Closure | Update the "Closed On" field with the current date and time if the status is Closed. |
-| Generate Asset Change Summary Report | Generate report by manual trigger in FortiSOAR |
-| Generate Report | Generates Report and Link to Incidents |
-
-### 00 - Use Case - Asset Management
-
-|Playbook Name|Description|
-| :- | :- |
 | Scenario - Create Nozomi Alert | Playbook generated sample CVEs, ICS Advisory, KEV Alert and Alert to understand Nozomi Use Case. |
 | > Create Scenario KEV Alert | Playbook creates scenario KEV Alert. |
 | Get Alert Details | Playbook execute post alert creation(source Nozomi CMC) and get Appliance Details, Assets, Node, Links and CVEs from Nozomi CMC. |
