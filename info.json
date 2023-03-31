@@ -2,6 +2,13 @@
     "name": "nozomiNetworksCentralManagementConsole",
     "version": "1.0.0",
     "fsrMinCompatibility": "7.3.0",
+    "featuredTags": [
+        {
+            "color": "#2d87e3",
+            "tag": "preview"
+        }
+    ],
+    "featured": true,
     "type": "solutionpack",
     "local": true,
     "label": "Nozomi Networks Central Management Console",
@@ -42,7 +49,7 @@
         "Asset Management",
         "OT & IoT Security"
     ],
-    "supportInfo": null,
+    "supportInfo": "support@fortinet.com",
     "iconLarge": null,
     "postInstallConfig": null,
     "date": "2023-03-30T14:58:42+00:00",
