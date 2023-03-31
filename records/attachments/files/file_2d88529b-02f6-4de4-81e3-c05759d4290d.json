@@ -1,0 +1,13 @@
+{
+    "@context": "\/api\/3\/contexts\/File",
+    "@type": "File",
+    "uuid": "2d88529b-02f6-4de4-81e3-c05759d4290d",
+    "assignee": "",
+    "id": "2d88529b-02f6-4de4-81e3-c05759d4290d",
+    "filename": "Nozomi_Sample_Data.json",
+    "mimeType": "application\/json",
+    "uploadDate": 1680184441.194367,
+    "size": 69688,
+    "thumbnail": null,
+    "metadata": []
+}

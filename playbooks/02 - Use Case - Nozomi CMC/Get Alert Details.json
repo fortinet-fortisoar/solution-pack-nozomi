@@ -1,0 +1,294 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Get Alert Details",
+    "aliasName": null,
+    "tag": null,
+    "description": "Playbook execute post alert creation(source Nozomi CMC) and get Appliance Details, Assets, Node, Links and CVEs from Nozomi CMC.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/566483c2-686f-4c7d-b8df-eb51583b1814",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/387d07d0-8651-4ab3-89b9-a2866df9e683",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Appliance Details In Alert",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_Appliance_Detail | length > 0}}",
+                "resource": {
+                    "__link": {
+                        "comments": "{{vars.steps.Get_Appliance_Detail['@id']}}"
+                    }
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/alerts",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "38fac3da-5b20-4803-aa32-96ec9d5439a0"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "sourceData": "{{vars.input.records[0].sourcedata | toDict}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "a4c6dbd9-238e-4a85-b2ad-8ea5bdc66c7e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Appliance Detail",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "applianceId": "{{vars.sourceData['appliance_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/119fa49b-b098-4618-8d3b-320587380959"
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "936dcdb9-f8c1-4306-9a29-d8327f93c5f4"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Assets Details",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "alertData": "{{vars.input.records[0]}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/9429e23a-2b6d-4a62-b1f3-49e1896f2347"
+            },
+            "status": null,
+            "top": "40",
+            "left": "520",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "30485bc3-510b-4615-ba34-63eb72b39e47"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Links",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "alertData": "{{vars.input.records[0]}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/e3203a54-f966-4e96-abeb-85341e6e77ad"
+            },
+            "status": null,
+            "top": "440",
+            "left": "520",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "c8f15c48-ee9a-4a78-b60d-4feb1378259a"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Node CVEs",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "alertData": "{{vars.input.records[0]}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/1af85ef8-ecfb-49e5-bdf7-7ce2cec5d9e0"
+            },
+            "status": null,
+            "top": "180",
+            "left": "520",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "32d97e4c-ec60-4ae6-b44d-27302b07cc43"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Nodes",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "alertData": "{{vars.input.records[0]}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/4d883603-fd3b-4372-a737-94e5dfa9d878"
+            },
+            "status": null,
+            "top": "300",
+            "left": "520",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "resource": "alerts",
+                "resources": [
+                    "alerts"
+                ],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": [
+                            "{{vars.input.records[0]}}"
+                        ]
+                    }
+                },
+                "fieldbasedtrigger": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "source",
+                            "value": "Nozomi Networks Central Management Console",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ]
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/ea155646-3821-4542-9702-b246da430a8d",
+            "group": null,
+            "uuid": "387d07d0-8651-4ab3-89b9-a2866df9e683"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Appliance Details In Alert -> Get Assets Details",
+            "targetStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
+            "sourceStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "08f64b87-0692-408d-b835-4396d7a03670"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get Appliance Detail",
+            "targetStep": "\/api\/3\/workflow_steps\/936dcdb9-f8c1-4306-9a29-d8327f93c5f4",
+            "sourceStep": "\/api\/3\/workflow_steps\/a4c6dbd9-238e-4a85-b2ad-8ea5bdc66c7e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e8600f64-9a27-4877-a795-01c03b02eaa9"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Appliance Detail -> Add Appliance Details In Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/38fac3da-5b20-4803-aa32-96ec9d5439a0",
+            "sourceStep": "\/api\/3\/workflow_steps\/936dcdb9-f8c1-4306-9a29-d8327f93c5f4",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "c64ed3ea-da49-4ae3-a648-307ae8d475ed"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Assets Details -> Get Node CVEs",
+            "targetStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
+            "sourceStep": "\/api\/3\/workflow_steps\/30485bc3-510b-4615-ba34-63eb72b39e47",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "3f2099c2-0880-4da8-9a78-ab673cad8451"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Node CVEs -> Get Nodes",
+            "targetStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
+            "sourceStep": "\/api\/3\/workflow_steps\/32d97e4c-ec60-4ae6-b44d-27302b07cc43",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f26ac381-969f-48bb-87e7-e79e221939b4"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Nodes -> Get Links",
+            "targetStep": "\/api\/3\/workflow_steps\/c8f15c48-ee9a-4a78-b60d-4feb1378259a",
+            "sourceStep": "\/api\/3\/workflow_steps\/44fbe6a7-3fa1-4f6b-a8ec-1dc6c083174d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "aeb9a706-6162-4796-a16a-e7a078e21b0a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/a4c6dbd9-238e-4a85-b2ad-8ea5bdc66c7e",
+            "sourceStep": "\/api\/3\/workflow_steps\/387d07d0-8651-4ab3-89b9-a2866df9e683",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "55503cdf-42bf-441d-9748-35ce1a24bbde"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "112ea5d7-5d61-49a3-ba9a-9009eb4adadc",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "PostCreate",
+        "Alert",
+        "KEV",
+        "CVE",
+        "Nozomi",
+        "Appliance",
+        "Events",
+        "Nodes",
+        "Links"
+    ]
+}

@@ -1,0 +1,38 @@
+[
+    {
+        "@type": "Scenario",
+        "configuration": null,
+        "title": "Nozomi Networks Central Management Console Scenario",
+        "description": "This Scenario adds 10 CVEs, 5 ICS Advisory, 5 KEV Alert and \"Inactive protocol OFF\" Alert. These data can be used to understand Nozomi Use Case.",
+        "steps": {
+            "Steps": [
+                {
+                    "name": "Scenario - Create Nozomi Alert.",
+                    "type": "executePlaybook",
+                    "playbookIRI": "\/api\/3\/workflows\/f9bdb309-cc12-461f-9613-0d9d08f11406",
+                    "preCreateMessage": "Creating CVEs, ICS Advisroy, KEV Alert and Alert demo records.",
+                    "postCreateMessage": "",
+                    "waitTimeforNextStep": "0"
+                }
+            ]
+        },
+        "createdAlertsID": null,
+        "uuid": "7a5a0534-6427-4f77-9f5a-52c7163091f3",
+        "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
+        "createDate": 1679998077.728555,
+        "modifyUser": "\/api\/3\/appliances\/57545210-2adc-472b-a24f-2df6ee8dfe63",
+        "modifyDate": 1680188297.174357,
+        "id": 10,
+        "recordTags": [
+            "Alert",
+            "Asset",
+            "ICS - Advisory",
+            "KEV",
+            "CVE",
+            "Nozomi",
+            "Events",
+            "Nodes",
+            "Links"
+        ]
+    }
+]

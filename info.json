@@ -1,0 +1,99 @@
+{
+    "name": "nozomiNetworksCentralManagementConsole",
+    "version": "1.0.0",
+    "fsrMinCompatibility": "7.3.0",
+    "featuredTags": [
+        {
+            "color": "#2d87e3",
+            "tag": "preview"
+        }
+    ],
+    "featured": true,
+    "type": "solutionpack",
+    "local": true,
+    "label": "Nozomi Networks Central Management Console",
+    "dependencies": [
+        {
+            "name": "sOARFramework",
+            "type": "solutionpack",
+            "label": "SOAR Framework",
+            "minVersion": "2.0.2"
+        },
+        {
+            "name": "socSimulator",
+            "type": "solutionpack",
+            "label": "SOC Simulator",
+            "minVersion": "1.0.2"
+        },
+        {
+            "name": "oT-AssetManagement",
+            "type": "solutionpack",
+            "label": "OT - Asset Management",
+            "minVersion": "1.0.0"
+        },
+        {
+            "name": "oT-VulnerabilityManagement",
+            "type": "solutionpack",
+            "label": "OT - Vulnerability Management",
+            "minVersion": "1.0.0"
+        }
+    ],
+    "prerequisite": null,
+    "publisher": "Fortinet",
+    "description": "The Nozomi Central Management Console Solution Pack helps in retrieving all relevant Assets, Nodes, Links, and CVEs for an Alert from Nozomi. Solution Pack fetches CVEs from Nozomi CMC in accordance with Asset Vendor. Helps in Deploying Decoys, Isolate affected assets and raise Ticket in Service Now.",
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.1.0/docs/README.md",
+    "category": [
+        "Vulnerability and Risk Management",
+        "Vulnerability Management",
+        "Alert Management",
+        "Asset Management",
+        "OT & IoT Security"
+    ],
+    "supportInfo": "support@fortinet.com",
+    "iconLarge": null,
+    "postInstallConfig": null,
+    "date": "2023-03-30T14:58:42+00:00",
+    "contents": {
+        "playbooks": [
+            {
+                "name": "02 - Use Case - Nozomi CMC"
+            }
+        ],
+        "globalVariables": [],
+        "playbookBlocks": [],
+        "connectors": [
+            {
+                "name": "ServiceNow",
+                "apiName": "servicenow"
+            },
+            {
+                "name": "File Content Extraction",
+                "apiName": "file-content-extraction"
+            },
+            {
+                "name": "Fortinet FortiDeceptor",
+                "apiName": "fortinet-fortideceptor"
+            },
+            {
+                "name": "Fortinet FortiEDR",
+                "apiName": "fortinet-fortiedr"
+            },
+            {
+                "name": "Nozomi Networks Central Management Console",
+                "apiName": "nozomi-networks-central-management-console"
+            }
+        ],
+        "recordSets": [
+            {
+                "name": "Attachments",
+                "apiName": "attachments",
+                "count": 1
+            },
+            {
+                "name": "Scenario",
+                "apiName": "scenario",
+                "count": 1
+            }
+        ]
+    }
+}
