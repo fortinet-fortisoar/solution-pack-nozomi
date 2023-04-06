@@ -348,7 +348,15 @@
                         "sort": [],
                         "limit": 30,
                         "logic": "AND",
-                        "filters": []
+                        "filters": [
+                            {
+                                "type": "primitive",
+                                "field": "source",
+                                "value": "Nozomi Networks Central Management Console",
+                                "operator": "eq",
+                                "_operator": "eq"
+                            }
+                        ]
                     }
                 },
                 "executeButtonText": "Execute",
