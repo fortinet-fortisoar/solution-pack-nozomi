@@ -41,7 +41,7 @@
     "prerequisite": null,
     "publisher": "Fortinet",
     "description": "The Nozomi Central Management Console Solution Pack helps in retrieving all relevant Assets, Nodes, Links, and CVEs for an Alert from Nozomi. Solution Pack fetches CVEs from Nozomi CMC in accordance with Asset Vendor. Helps in Deploying Decoys, Isolate affected assets and raise Ticket in Service Now.",
-    "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.1.0/docs/README.md",
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-nozomi/blob/release/1.0.0/README.md",
     "category": [
         "Vulnerability and Risk Management",
         "Vulnerability Management",
@@ -52,7 +52,7 @@
     "supportInfo": "support@fortinet.com",
     "iconLarge": null,
     "postInstallConfig": null,
-    "date": "2023-03-30T14:58:42+00:00",
+    "date": "2023-04-06T08:42:50+00:00",
     "contents": {
         "playbooks": [
             {
