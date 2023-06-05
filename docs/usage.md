@@ -17,7 +17,7 @@ Refer to the section *Nozomi Networks Central Management Console* to understand 
 
 ## Simulation mode
 
-The simulation mode has some sample data that helps you get a better understanding of how the solution pack functions. Following steps help you use the solution pack with some included sample data.
+The simulation mode has some sample data that helps you get a better understanding of how the solution pack functions. The following steps help you use the solution pack with some included sample data.
 
 - Browse to **Simulations** > **Nozomi Networks Central Management Console Scenario** scenario and click **Simulate Scenari**o.
 - The following list of records is created.
@@ -44,15 +44,15 @@ On creation of an alert in FortiSOAR from *Nozomi Network Central Management Con
 
     - Appliance details are represented in comments
 
-    - Alerts are correlated with asset as per source and destination MAC addresses
+    - Alerts are correlated with assets as per source and destination MAC addresses
 
-        > **Note**: Is Asset is not found for any MAC addresses, then asset gets created for same with MAC Address.
+        > **Note**: If an asset is not found for any MAC addresses, the asset is created for the same with MAC Address.
 
     - According to the `Asset ID` and `Vendor` for affected assets, alerts are correlated with CVEs and ICS Advisory, and comments are provided for each
 
     - According to the Source and Destination IP of an alert, nodes are fetched from Nozomi CMC. Each node is received as a new asset if found in Nozomi CMC.
 
-    - Recent network activity is fetched from Nozomi CMC as an event for alert's Source IP and Destination IP addresses
+    - Recent network activity is fetched from Nozomi CMC as an event for the alert's Source IP and Destination IP addresses
 
 - **At Asset Level**
 
@@ -72,5 +72,5 @@ On creation of an alert in FortiSOAR from *Nozomi Network Central Management Con
 
 - Mark all the playbooks under the collections **02 - Use Case - ICS Advisory and CVEs** and **02 - Use Case - KEV Alert** as active.
 
-| [Installation](./docs/setup.md#installation) | [Configuration](./docs/setup.md#configuration) | [Contents](./docs/contents.md) |
-|----------------------------------------------|------------------------------------------------|--------------------------------|
+| [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Contents](./contents.md) |
+|-----------------------------------------|-------------------------------------------|---------------------------|

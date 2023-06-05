@@ -33,5 +33,5 @@ For the optimal performance of **Nozomi Networks Central Management Console** so
 
 - **ServiceNow** connectors to raise tickets. To configure and use the ServiceNow connector, refer to [Configuring ServiceNow](https://docs.fortinet.com/fortisoar/connectors/servicenow-v2-0-1)
 
-| [Usage](./docs/usage.md) | [Contents](./docs/contents.md) |
-|--------------------------|--------------------------------|
+| [Usage](./usage.md) | [Contents](./contents.md) |
+|---------------------|---------------------------|

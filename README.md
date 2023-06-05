@@ -11,9 +11,7 @@
 
 **Nozomi Network Central Management Console** solution pack helps retrieve relevant assets, nodes, links, and CVEs for an alert received from Nozomi. The solution pack fetches CVEs from Nozomi CMC in accordance with the asset vendor and helps deploy decoys, isolate affected assets, and raise tickets in ServiceNow.
 
-
-
 # Next Steps
 
 | [Installation](./docs/setup.md#installation) | [Configuration](./docs/setup.md#configuration) | [Usage](./docs/usage.md) | [Contents](./docs/contents.md) |
-|--------------------------------------------|----------------------------------------------|------------------------|------------------------------|
+|----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|
